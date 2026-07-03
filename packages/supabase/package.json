@@ -29,7 +29,7 @@
     "pg": "^8.13.1",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "catalog:",
-    "kysely": "^0.27.6"
+    "kysely": "^0.28.17"
   },
   "devDependencies": {
     "@types/node": "catalog:",

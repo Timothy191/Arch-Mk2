@@ -21,6 +21,15 @@ This file maintains a record of AI agent interventions, context hand-offs, and a
   - Simplified `apps/portal/lib/ai/ollama.ts` by extracting request-body builder, `postChat`, error-text parser, and `parseStreamBuffer` from `ollamaChatStream`.
   - Verified `lib/ai/embeddings.test.ts` still passes (10/10).
 
+## [2026-07-03] Harden portal middleware
+
+- **Agent**: Claude Code
+- **Changes**:
+  - Refactored `apps/portal/proxy.ts` into focused helpers: public-path detection, session cookie check, auth resolution, employee lookup, restricted-route check, department isolation.
+  - Tightened `isValidRedirect` regexes with `$` anchors to prevent prefix bypasses (e.g. `/loginfoo`). Exported `isValidRedirect` for direct unit testing.
+  - Removed dead `/api/*` checks from middleware body (matcher already excludes API routes).
+  - Added comprehensive `isValidRedirect` tests in `apps/portal/proxy.test.ts`; full suite 33/33 passing.
+
 ## [2026-06-05] AMCA Foundation / Initialization
 
 - **Agent**: Antigravity

@@ -198,7 +198,10 @@ function buildFormData(
         .map((r) => r.machine_id),
     ),
     machineOpHoursMap: sumHoursByMachineId(
-      machineOps.map((r) => ({ machine_id: r.machine_id, hours: r.hours_worked })),
+      machineOps.map((r) => ({
+        machine_id: r.machine_id,
+        hours: r.hours_worked,
+      })),
     ),
     dozerHoursMap: sumHoursByMachineId(
       dozerRolls.map((r) => ({
@@ -209,7 +212,11 @@ function buildFormData(
   };
 }
 
-function resolveHasEntry(requiredForm: RequiredForm, data: ShiftFormData, machineId: string): boolean {
+function resolveHasEntry(
+  requiredForm: RequiredForm,
+  data: ShiftFormData,
+  machineId: string,
+): boolean {
   switch (requiredForm) {
     case "excavator-activity":
       return data.excavatorIds.has(machineId);
@@ -297,11 +304,7 @@ export async function getShiftCompleteness(
         dozerRolls,
         hourlyLoads,
       );
-      const statuses = buildMachineStatuses(
-        machines,
-        formData,
-        departmentSlug,
-      );
+      const statuses = buildMachineStatuses(machines, formData, departmentSlug);
       return summarize(statuses);
     },
     {

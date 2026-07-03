@@ -150,9 +150,7 @@ function decodeChunk(value: Uint8Array, decoder: TextDecoder): string {
   return decoder.decode(value, { stream: true });
 }
 
-function parseStreamBuffer(
-  buffer: string,
-): {
+function parseStreamBuffer(buffer: string): {
   chunks: Array<{ text: string; done: boolean }>;
   remainder: string;
 } {

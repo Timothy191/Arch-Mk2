@@ -1,7 +1,12 @@
 /**
  * @jest-environment node
  */
-import { normalizeRole, isTokenExpiredError, proxy } from "./proxy";
+import {
+  normalizeRole,
+  isTokenExpiredError,
+  isValidRedirect,
+  proxy,
+} from "./proxy";
 import { NextRequest } from "next/server";
 
 jest.mock("@repo/supabase/middleware", () => ({
@@ -147,6 +152,40 @@ describe("isTokenExpiredError", () => {
 
   it("returns false for objects without message property", () => {
     expect(isTokenExpiredError({ code: 500 })).toBe(false);
+  });
+});
+
+describe("isValidRedirect", () => {
+  it("accepts exact root", () => {
+    expect(isValidRedirect("/")).toBe(true);
+  });
+
+  it("accepts valid department paths", () => {
+    expect(isValidRedirect("/drilling")).toBe(true);
+    expect(isValidRedirect("/drilling/machine-operations")).toBe(true);
+    expect(isValidRedirect("/safety")).toBe(true);
+  });
+
+  it("rejects prefix bypasses", () => {
+    expect(isValidRedirect("/loginfoo")).toBe(false);
+    expect(isValidRedirect("/drillingx")).toBe(false);
+    expect(isValidRedirect("/adminx")).toBe(false);
+  });
+
+  it("rejects protocol-relative and data URLs", () => {
+    expect(isValidRedirect("//evil.com")).toBe(false);
+    expect(isValidRedirect("/\\\\evil.com")).toBe(false);
+    expect(isValidRedirect("javascript:alert(1)")).toBe(false);
+    expect(isValidRedirect("data:text/html,<h1>hi</h1>")).toBe(false);
+  });
+
+  it("rejects absolute URLs", () => {
+    expect(isValidRedirect("https://evil.com")).toBe(false);
+    expect(isValidRedirect("http://localhost/admin")).toBe(false);
+  });
+
+  it("rejects malformed URL-encoded strings", () => {
+    expect(isValidRedirect("%")).toBe(false);
   });
 });
 

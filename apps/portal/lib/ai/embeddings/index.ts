@@ -106,9 +106,8 @@ export async function batchGenerateEmbeddings(
 
     // Step 3: Local LLM generation for remaining misses
     if (needsGenerationTexts.length > 0) {
-      const fresh = await getPrimaryProvider().batchGenerate(
-        needsGenerationTexts,
-      );
+      const fresh =
+        await getPrimaryProvider().batchGenerate(needsGenerationTexts);
 
       const dbInsertRows: {
         text_hash: string;
