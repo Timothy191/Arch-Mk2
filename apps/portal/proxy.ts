@@ -3,26 +3,17 @@ import { createMiddlewareClient } from "@repo/supabase/middleware";
 import { cacheGet, cacheSet, cacheEvictL1ByPrefix } from "@repo/redis/cache";
 import { recordJobExecution } from "@/lib/observability/metrics";
 
-/**
- * Server-side redirect validation with canonicalization and allowlist.
- *
- * Validates that redirect targets are internal and safe:
- * 1. Decodes URL-encoded redirects to reveal hidden protocols/paths
- * 2. Canonicalizes to prevent bypass techniques (//, \\, etc.)
- * 3. Checks against an allowlist of permitted path patterns
- * 4. Rejects protocol-relative URLs, data URIs, and javascript: URIs
- */
+export const runtime = "nodejs";
+
 export function isValidRedirect(path: string): boolean {
   if (!path) return false;
 
-  // Decode the path to reveal URL-encoded bypass attempts
   try {
     path = decodeURIComponent(path);
   } catch {
     return false;
   }
 
-  // Reject protocol-relative URLs, data URIs, javascript: URIs
   if (
     path.startsWith("//") ||
     path.startsWith("/\\") ||
@@ -33,35 +24,28 @@ export function isValidRedirect(path: string): boolean {
     return false;
   }
 
-  // Must start with a single slash (internal relative path)
   if (!path.startsWith("/")) return false;
 
-  // Allowlist of permitted path patterns — anchored to full path or first segment
-  // to prevent prefix bypasses like /loginfoo or /drillingx.
   const allowedPatterns = [
-    /^\/$/, // Root
-    /^\/login(?:\/.*)?$/, // Login page
-    /^\/reset-password(?:\/.*)?$/, // Password reset
-    /^\/update-password(?:\/.*)?$/, // Password update
-    /^\/drilling(?:\/.*)?$/, // Drilling department
-    /^\/production(?:\/.*)?$/, // Production department
-    /^\/access-control(?:\/.*)?$/, // Access control department
-    /^\/engineering(?:\/.*)?$/, // Engineering department
-    /^\/control-room(?:\/.*)?$/, // Control room department
-    /^\/safety(?:\/.*)?$/, // Safety department
-    /^\/training(?:\/.*)?$/, // Training department
-    /^\/satellite-monitoring(?:\/.*)?$/, // Satellite monitoring department
-    /^\/hub(?:\/.*)?$/, // Hub
-    /^\/admin(?:\/.*)?$/, // Admin
+    /^\/$/,
+    /^\/login(?:\/.*)?$/,
+    /^\/reset-password(?:\/.*)?$/,
+    /^\/update-password(?:\/.*)?$/,
+    /^\/drilling(?:\/.*)?$/,
+    /^\/production(?:\/.*)?$/,
+    /^\/access-control(?:\/.*)?$/,
+    /^\/engineering(?:\/.*)?$/,
+    /^\/control-room(?:\/.*)?$/,
+    /^\/safety(?:\/.*)?$/,
+    /^\/training(?:\/.*)?$/,
+    /^\/satellite-monitoring(?:\/.*)?$/,
+    /^\/hub(?:\/.*)?$/,
+    /^\/admin(?:\/.*)?$/,
   ];
 
-  // Check if path matches any allowed pattern
   return allowedPatterns.some((pattern) => pattern.test(path));
 }
 
-// DEPARTMENT_ROUTES intentionally excludes '/admin' because admin is a top-level
-// restricted route, not a sub-route under (departments). Admin access is handled
-// separately via its own auth check in RESTRICTED_ROUTES.
 const DEPARTMENT_ROUTES = [
   "drilling",
   "production",
@@ -148,18 +132,10 @@ async function resolveDeptUuid(
     .eq("name", slug)
     .single();
   if (data?.id) {
-    await cacheSet(cacheKey, data.id, 3600); // 1 hour
+    await cacheSet(cacheKey, data.id, 3600);
   }
   return data?.id || null;
 }
-
-// AGENT-TRACE: Department names are slugified with hyphens; the DB stores the
-// canonical slug. Keep the lookup simple and cache it aggressively because it is
-// hit on every department route.
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Public path short-circuits
-// ─────────────────────────────────────────────────────────────────────────────
 
 const PUBLIC_FILE_EXTENSIONS =
   /\.(jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|otf|eot|mp4|webm|mp3|wav)$/i;
@@ -183,10 +159,6 @@ function isPublicPath(pathname: string): boolean {
   if (isPublicRootFile(pathname)) return true;
   return false;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Auth helpers
-// ─────────────────────────────────────────────────────────────────────────────
 
 type MiddlewareClient = Awaited<ReturnType<typeof createMiddlewareClient>>;
 
@@ -224,10 +196,6 @@ function hasSessionCookie(request: NextRequest): boolean {
     )
   );
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Route access helpers
-// ─────────────────────────────────────────────────────────────────────────────
 
 interface EmployeeAuth {
   role: string;
@@ -294,14 +262,9 @@ async function isDepartmentAllowed(
   return hasAccess ? "ok" : "unauthorized";
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main middleware
-// ─────────────────────────────────────────────────────────────────────────────
-
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Exempt password reset and update flows from middleware auth gating.
   if (
     pathname.startsWith("/reset-password") ||
     pathname.startsWith("/update-password")
@@ -309,22 +272,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Short-circuit static public file extensions and root files BEFORE any auth calls.
   if (isPublicPath(pathname)) {
     return NextResponse.next();
   }
 
-  // Short-circuit the login page BEFORE calling Supabase — avoids a full
-  // network round-trip (~50 s cold) for a public unauthenticated route.
-  // We only need auth here if there IS a session cookie (to redirect logged-in
-  // users away from /login), so we check that cheaply first.
   if (pathname.startsWith("/login")) {
     if (!hasSessionCookie(request)) {
-      // No session cookie at all — serve login instantly, no Supabase call
       return NextResponse.next();
     }
 
-    // Has a session cookie — verify it and redirect if valid
     const client = await createMiddlewareClient(request);
     const { user, shouldSignOut } = await getSessionUser(client);
 
@@ -359,7 +315,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Not authenticated -> login
   if (!user) {
     const redirectUrl = new URL("/login", request.url);
     if (isValidRedirect(pathname)) {
@@ -370,7 +325,6 @@ export async function proxy(request: NextRequest) {
     return redirectResponse;
   }
 
-  // Fetch authoritative role/department from employees table (cached)
   const employee = await resolveEmployee(client.supabase, user.id);
   const userRole = normalizeRole(employee?.role);
 
@@ -378,7 +332,6 @@ export async function proxy(request: NextRequest) {
   const topSegment = pathSegments[0];
   const secondSegment = pathSegments[1];
 
-  // Check restricted top-level routes and dept tools
   if (!isRestrictedRouteAllowed(pathname, secondSegment, userRole)) {
     return redirectWithError(
       request,
@@ -387,7 +340,6 @@ export async function proxy(request: NextRequest) {
     );
   }
 
-  // Check department isolation
   if (topSegment) {
     const deptStatus = await isDepartmentAllowed(
       client.supabase,
@@ -414,8 +366,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Exclude static assets and API routes from middleware.
-  // API routes handle their own auth; running Supabase getUser() here adds
-  // a redundant round-trip (and ~50 s cold-start risk) to every API call.
   matcher: ["/((?!_next/static|_next/image|api/|favicon.ico).*)"],
 };

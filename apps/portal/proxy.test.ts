@@ -5,8 +5,8 @@ import {
   normalizeRole,
   isTokenExpiredError,
   isValidRedirect,
-  proxy,
-} from "./proxy";
+  middleware,
+} from "./middleware";
 import { NextRequest } from "next/server";
 
 jest.mock("@repo/supabase/middleware", () => ({
@@ -29,7 +29,7 @@ const { createMiddlewareClient } = jest.requireMock(
 );
 const { cacheGet } = jest.requireMock("@repo/redis/cache");
 
-function buildProxyMock(
+function buildMiddlewareMock(
   overrides: {
     user?: unknown;
     employee?: unknown;
@@ -189,45 +189,43 @@ describe("isValidRedirect", () => {
   });
 });
 
-describe("proxy", () => {
+describe("middleware", () => {
   beforeEach(() => jest.clearAllMocks());
 
   it("passes through static file requests", async () => {
-    buildProxyMock();
+    buildMiddlewareMock();
     const req = makeRequest("/logo.png");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res).toBeDefined();
-    // Should return the raw response (not a redirect)
     expect(res.status).not.toBe(307);
   });
 
   it("redirects authenticated user away from /login to /", async () => {
-    buildProxyMock({ user: { id: "auth-1" } });
+    buildMiddlewareMock({ user: { id: "auth-1" } });
     const req = makeRequest("/login");
     req.cookies.set("sb-access-token", "mock-token");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("/");
   });
 
   it("passes /login through for unauthenticated users", async () => {
-    buildProxyMock({ user: null });
+    buildMiddlewareMock({ user: null });
     const req = makeRequest("/login");
-    const res = await proxy(req);
-    // Returns the raw middleware response (not a redirect)
+    const res = await middleware(req);
     expect(res.status).not.toBe(307);
   });
 
   it("redirects unauthenticated users to /login with redirect param", async () => {
-    buildProxyMock({ user: null });
+    buildMiddlewareMock({ user: null });
     const req = makeRequest("/drilling");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("/login");
   });
 
   it("redirects non-admin users accessing /admin to error page", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-1",
@@ -235,13 +233,13 @@ describe("proxy", () => {
       },
     });
     const req = makeRequest("/admin");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("unauthorized_department");
   });
 
   it("allows admin to access /admin", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "admin",
         department_id: "dept-1",
@@ -250,12 +248,12 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/admin");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).not.toBe(307);
   });
 
   it("redirects non-admin/supervisor to /control-room", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-1",
@@ -263,13 +261,13 @@ describe("proxy", () => {
       },
     });
     const req = makeRequest("/control-room");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("unauthorized_department");
   });
 
   it("allows control_room_operator to access /control-room with matching dept", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "control_room_operator",
         department_id: "dept-uuid-cr",
@@ -279,12 +277,12 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/control-room");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).not.toBe(307);
   });
 
   it("redirects user to unknown_department when dept UUID not found", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-1",
@@ -294,13 +292,13 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/drilling");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("unknown_department");
   });
 
   it("redirects user without dept access to unauthorized_department", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-other",
@@ -310,13 +308,13 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/drilling");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("unauthorized_department");
   });
 
   it("uses cached dept UUID when available", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "cached-uuid",
@@ -334,13 +332,12 @@ describe("proxy", () => {
       return Promise.resolve(null);
     });
     const req = makeRequest("/drilling");
-    const res = await proxy(req);
-    // operator with matching dept should pass through
+    const res = await middleware(req);
     expect(res.status).not.toBe(307);
   });
 
   it("allows user with accessible_departments to access dept routes", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-other",
@@ -350,12 +347,12 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/drilling");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).not.toBe(307);
   });
 
   it("redirects non-supervisor to dept tools", async () => {
-    buildProxyMock({
+    buildMiddlewareMock({
       employee: {
         role: "operator",
         department_id: "dept-uuid-1",
@@ -365,13 +362,13 @@ describe("proxy", () => {
     });
     (cacheGet as jest.Mock).mockResolvedValue(null);
     const req = makeRequest("/drilling/tools");
-    const res = await proxy(req);
+    const res = await middleware(req);
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("unauthorized_department");
   });
 
   it("signs out and redirects to /login on expired/invalid refresh token on protected route", async () => {
-    const { supabase } = buildProxyMock();
+    const { supabase } = buildMiddlewareMock();
     supabase.auth.getUser.mockResolvedValue({
       error: { message: "Invalid Refresh Token" },
       data: { user: null },
@@ -380,7 +377,7 @@ describe("proxy", () => {
 
     const req = makeRequest("/drilling");
     req.cookies.set("sb-access-token", "expired-token");
-    const res = await proxy(req);
+    const res = await middleware(req);
 
     expect(supabase.auth.signOut).toHaveBeenCalled();
     expect(res.status).toBe(307);
@@ -388,7 +385,7 @@ describe("proxy", () => {
   });
 
   it("signs out and returns base response when /login is accessed with expired session cookie", async () => {
-    const { supabase, mockResponse } = buildProxyMock();
+    const { supabase, mockResponse } = buildMiddlewareMock();
     supabase.auth.getUser.mockResolvedValue({
       error: { message: "Refresh Token Not Found" },
       data: { user: null },
@@ -397,7 +394,7 @@ describe("proxy", () => {
 
     const req = makeRequest("/login");
     req.cookies.set("sb-access-token", "expired-token");
-    const res = await proxy(req);
+    const res = await middleware(req);
 
     expect(supabase.auth.signOut).toHaveBeenCalled();
     expect(res).toBe(mockResponse);
