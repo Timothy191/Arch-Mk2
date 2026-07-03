@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "generated_at": "2026-07-03T10:28:23.594775+00:00",
+  "co_changes": [],
+  "package_deps": [
+    {
+      "source_repo": "repowise",
+      "target_repo": "arch-mk2",
+      "source_manifest": "tests/fixtures/dotnet_solution/src/Api/Api.csproj",
+      "kind": "dotnet_project_ref"
+    }
+  ],
+  "repo_summaries": {
+    "arch-mk2": {
+      "cross_repo_edge_count": 1
+    },
+    "repowise": {
+      "cross_repo_edge_count": 1
+    }
+  }
+}

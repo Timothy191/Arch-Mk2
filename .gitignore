@@ -1,0 +1,66 @@
+node_modules
+
+# Build outputs
+.next
+dist
+out
+build
+*.tsbuildinfo
+.turbo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.vscode/launch.json
+.idea
+
+# Test / coverage
+coverage
+.nyc_output
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# Supabase
+packages/supabase/supabase/.temp
+packages/supabase/supabase/functions/**/*.pem
+.audit
+
+# Generated / lock artifacts (keep pnpm-lock.yaml tracked)
+package-lock.json
+yarn.lock
+
+# Python / eval
+__pycache__
+*.pyc
+.pytest_cache
+.poetry
+.venv
+venv
+
+# Rust
+/target
+Cargo.lock
+
+# Docker volumes
+postgres-data
+redis-data
+minio-data
+
+# Misc
+*.swp
+*.swo
+*~

@@ -1,0 +1,2650 @@
+{
+  "version": 1,
+  "generated_at": "2026-07-03T10:28:26.104737+00:00",
+  "contracts": [
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/telemetry/push",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/app/(auth)/login/LoginForm.tsx",
+      "symbol_name": "fetch:POST /api/telemetry/push",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/telemetry/push",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/auth/login",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/app/(auth)/login/LoginForm.tsx",
+      "symbol_name": "fetch:POST /api/auth/login",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/api/tags",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/app/api/health/route.ts",
+      "symbol_name": "fetch:GET ${OLLAMA_URL}/api/tags",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "GET",
+        "path": "/api/tags",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/api/health",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/components/system/SystemTray.tsx",
+      "symbol_name": "fetch:GET /api/health",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "GET",
+        "path": "/api/health",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/api/tools/status",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/features/departments/components/tools/ToolsPageClient.tsx",
+      "symbol_name": "fetch:GET /api/tools/status",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "GET",
+        "path": "/api/tools/status",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/webhooks",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/features/webhooks/components/WebhookManager.tsx",
+      "symbol_name": "fetch:POST /api/webhooks",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/webhooks",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::PUT::/api/webhooks/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/features/webhooks/components/WebhookManager.tsx",
+      "symbol_name": "fetch:PUT /api/webhooks/${editingWebhook.id}",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "PUT",
+        "path": "/api/webhooks/{param}",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::DELETE::/api/webhooks/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/features/webhooks/components/WebhookManager.tsx",
+      "symbol_name": "fetch:DELETE /api/webhooks/${id}",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "DELETE",
+        "path": "/api/webhooks/{param}",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/chat",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/ai/ollama.ts",
+      "symbol_name": "fetch:POST ${OLLAMA_URL}/api/chat",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/chat",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/chat",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/ai/ollama.ts",
+      "symbol_name": "fetch:POST ${OLLAMA_URL}/api/chat",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/chat",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/embed",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/ai/ollama.ts",
+      "symbol_name": "fetch:POST ${OLLAMA_URL}/api/embed",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/embed",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/chat",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/ai/tool-dispatch.ts",
+      "symbol_name": "fetch:POST ${OLLAMA_URL}/api/chat",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/chat",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/chat",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/ai/tool-dispatch.ts",
+      "symbol_name": "fetch:POST ${OLLAMA_URL}/api/chat",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/chat",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "OLLAMA_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/sync/playback",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/lib/sync/sync-queue.ts",
+      "symbol_name": "fetch:POST /api/sync/playback",
+      "confidence": 0.75,
+      "service": "apps/portal",
+      "meta": {
+        "method": "POST",
+        "path": "/api/sync/playback",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/api/plugins/rust-telemetry",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "apps/portal/plugins/rust-telemetry-engine/index.tsx",
+      "symbol_name": "fetch:POST /api/plugins/rust-telemetry",
+      "confidence": 0.75,
+      "service": "apps/portal/plugins/rust-telemetry-engine",
+      "meta": {
+        "method": "POST",
+        "path": "/api/plugins/rust-telemetry",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/webhook/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/utils/src/n8n.ts",
+      "symbol_name": "fetch:POST ${N8N_URL}/webhook/${path}",
+      "confidence": 0.75,
+      "service": "packages/utils",
+      "meta": {
+        "method": "POST",
+        "path": "/webhook/{param}",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/rest/workflows",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/utils/src/n8n.ts",
+      "symbol_name": "wrapper:GET ${N8N_URL}/rest/workflows",
+      "confidence": 0.65,
+      "service": "packages/utils",
+      "meta": {
+        "method": "GET",
+        "path": "/rest/workflows",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/rest/workflows/{param}/activate",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/utils/src/n8n.ts",
+      "symbol_name": "wrapper:GET ${N8N_URL}/rest/workflows/${body.data.id}/activate",
+      "confidence": 0.65,
+      "service": "packages/utils",
+      "meta": {
+        "method": "GET",
+        "path": "/rest/workflows/{param}/activate",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/rest/workflows/{param}/execute",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/utils/src/n8n.ts",
+      "symbol_name": "wrapper:GET ${N8N_URL}/rest/workflows/${workflowId}/execute",
+      "confidence": 0.65,
+      "service": "packages/utils",
+      "meta": {
+        "method": "GET",
+        "path": "/rest/workflows/{param}/execute",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/rest/executions/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/utils/src/n8n.ts",
+      "symbol_name": "wrapper:GET ${N8N_URL}/rest/executions/${executionId}",
+      "confidence": 0.65,
+      "service": "packages/utils",
+      "meta": {
+        "method": "GET",
+        "path": "/rest/executions/{param}",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/rest/login",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET ${N8N_URL}/rest/login",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/rest/login",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/workflows/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET /workflows/${safeId}",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/workflows/{param}",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/webhook/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET ${N8N_URL}/webhook/${safePath}",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/webhook/{param}",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "N8N_URL"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/executions/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET /executions/${safeId}",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/executions/{param}",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/workflows",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET /workflows",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/workflows",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/workflows/{param}/activate",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET /workflows/${data.data.id}/activate",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/workflows/{param}/activate",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/workflows/{param}/activate",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:POST /workflows/${safeId}/activate",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "POST",
+        "path": "/workflows/{param}/activate",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::POST::/workflows/{param}/deactivate",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:POST /workflows/${safeId}/deactivate",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "POST",
+        "path": "/workflows/{param}/deactivate",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "arch-mk2",
+      "contract_id": "http::GET::/workflows",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "tools/n8n-mcp/index.js",
+      "symbol_name": "wrapper:GET /workflows?tags=${safeTag}",
+      "confidence": 0.65,
+      "service": "tools/n8n-mcp",
+      "meta": {
+        "method": "GET",
+        "path": "/workflows",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/c4/mermaid",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/c4.ts",
+      "symbol_name": "wrapper:GET ${BASE_URL}/api/graph/${repoId}/c4/mermaid?${params.toString()}",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/c4/mermaid",
+        "client": "wrapper",
+        "base_stripped": true,
+        "base_token": "BASE_URL"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/chat/conversations/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/chat.ts",
+      "symbol_name": "wrapper:GET /api/repos/${repoId}/chat/conversations/${conversationId}",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/chat/conversations/{param}",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/chat/conversations/{param}",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/chat.ts",
+      "symbol_name": "wrapper:GET /api/repos/${repoId}/chat/conversations/${conversationId}",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/chat/conversations/{param}",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/co-changes",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/git.ts",
+      "symbol_name": "wrapper:GET /api/repos/${repoId}/co-changes",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/co-changes",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/providers/{param}/key",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/providers.ts",
+      "symbol_name": "wrapper:GET /api/providers/${providerId}/key",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/providers/{param}/key",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/providers/{param}/key",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/api-client/src/providers.ts",
+      "symbol_name": "wrapper:GET /api/providers/${providerId}/key",
+      "confidence": 0.65,
+      "service": "packages/api-client",
+      "meta": {
+        "method": "GET",
+        "path": "/api/providers/{param}/key",
+        "client": "wrapper"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/path",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/http/fastapi.py",
+      "symbol_name": "fastapi:GET /path",
+      "confidence": 0.85,
+      "service": "packages/core",
+      "meta": {
+        "method": "GET",
+        "path": "/path",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/snapshots/{param}/c4",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/http/mounts.py",
+      "symbol_name": "fastapi:GET /snapshots/{id}/c4",
+      "confidence": 0.85,
+      "service": "packages/core",
+      "meta": {
+        "method": "GET",
+        "path": "/snapshots/{param}/c4",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/users",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/http/python_clients.py",
+      "symbol_name": "requests:GET http://host/api/users",
+      "confidence": 0.75,
+      "service": "packages/core",
+      "meta": {
+        "method": "GET",
+        "path": "/api/users",
+        "client": "requests",
+        "host": "host"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/blast-radius",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/blast_radius.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/blast-radius",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/blast-radius",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/c4/l1",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/c4/l1",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/c4/l1",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/c4/l2",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/c4/l2",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/c4/l2",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/c4/l3",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/c4/l3",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/c4/l3",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/c4/mermaid",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/c4/mermaid",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/c4/mermaid",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/architecture-view",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/architecture-view",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/architecture-view",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/graph/{param}/zoom-map",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/c4.py",
+      "symbol_name": "fastapi:GET /api/graph/{repo_id}/zoom-map",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/graph/{param}/zoom-map",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/chat/messages",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/chat.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/chat/messages",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/chat/messages",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/chat/conversations",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/chat.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/chat/conversations",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/chat/conversations",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/chat/conversations/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/chat.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/chat/conversations/{conversation_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/chat/conversations/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::DELETE::/api/repos/{param}/chat/conversations/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/chat.py",
+      "symbol_name": "fastapi:DELETE /api/repos/{repo_id}/chat/conversations/{conversation_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "DELETE",
+        "path": "/api/repos/{param}/chat/conversations/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/claude-md",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/claude_md.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/claude-md",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/claude-md",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/claude-md/generate",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/claude_md.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/claude-md/generate",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/claude-md/generate",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/overview",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/overview",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/overview",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/badge.json",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/badge.json",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/badge.json",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/badge.svg",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/badge.svg",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/badge.svg",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/modules",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/modules",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/modules",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/findings",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/findings",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/findings",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/files",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/files",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/files",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/files/breakdown",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/files/breakdown",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/files/breakdown",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/files/trend",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/files/trend",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/files/trend",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/trend",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/trend",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/trend",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/repos/{param}/health/findings/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:PATCH /api/repos/{repo_id}/health/findings/{finding_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/repos/{param}/health/findings/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/coverage",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/coverage",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/coverage",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/refactoring-targets",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/refactoring-targets",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/refactoring-targets",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/churn-complexity",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/code_health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/churn-complexity",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/churn-complexity",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/costs/summary",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/costs.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/costs/summary",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/costs/summary",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/costs",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/costs.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/costs",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/costs",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/distill-savings",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/costs.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/distill-savings",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/distill-savings",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/coupling",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/coupling.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/coupling",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/coupling",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/dead-code",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/dead_code.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/dead-code",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/dead-code",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/dead-code/analyze",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/dead_code.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/dead-code/analyze",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/dead-code/analyze",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/dead-code/summary",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/dead_code.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/dead-code/summary",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/dead-code/summary",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/dead-code/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/dead_code.py",
+      "symbol_name": "fastapi:PATCH /api/dead-code/{finding_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/dead-code/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions/health",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions/health",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions/health",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions/graph",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions/graph",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions/graph",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions/{decision_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions/{param}/evidence",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions/{decision_id}/evidence",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions/{param}/evidence",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/decisions/{param}/lineage",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/decisions/{decision_id}/lineage",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/decisions/{param}/lineage",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/decisions",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/decisions",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/decisions",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/repos/{param}/decisions/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/decisions.py",
+      "symbol_name": "fastapi:PATCH /api/repos/{repo_id}/decisions/{decision_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/repos/{param}/decisions/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/external-systems",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/external_systems.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/external-systems",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/external-systems",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/files",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/files.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/files",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/files",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/files/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/files.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/files/{file_path:path}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/files/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/commits",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/commits",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/commits",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/commits/agent-trend",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/commits/agent-trend",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/commits/agent-trend",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/commits/stats",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/commits/stats",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/commits/stats",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/commits/evolution",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/commits/evolution",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/commits/evolution",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/commits/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/commits/{sha}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/commits/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/git-metadata",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/git-metadata",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/git-metadata",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/hotspots",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/hotspots",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/hotspots",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/ownership",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/ownership",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/ownership",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/co-changes",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/co-changes",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/co-changes",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/reviewer-suggestions",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/reviewer-suggestions",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/reviewer-suggestions",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/risk/range",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/risk/range",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/risk/range",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/git-summary",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/git.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/git-summary",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/git-summary",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/health",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/health.py",
+      "symbol_name": "fastapi:GET /health",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/health",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/metrics",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/health.py",
+      "symbol_name": "fastapi:GET /metrics",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/metrics",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/health/coordinator",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/health.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/health/coordinator",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/health/coordinator",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/jobs/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/jobs.py",
+      "symbol_name": "fastapi:GET /api/jobs/{job_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/jobs/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/jobs/{param}/cancel",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/jobs.py",
+      "symbol_name": "fastapi:POST /api/jobs/{job_id}/cancel",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/jobs/{param}/cancel",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/jobs/{param}/stream",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/jobs.py",
+      "symbol_name": "fastapi:GET /api/jobs/{job_id}/stream",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/jobs/{param}/stream",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/knowledge-map",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/knowledge_map.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/knowledge-map",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/knowledge-map",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/mcp/tools",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/mcp.py",
+      "symbol_name": "fastapi:GET /api/mcp/tools",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/mcp/tools",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/mcp/tools",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/mcp.py",
+      "symbol_name": "fastapi:PATCH /api/mcp/tools",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/mcp/tools",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/meta/version",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/meta.py",
+      "symbol_name": "fastapi:GET /api/meta/version",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/meta/version",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/meta/changelog",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/meta.py",
+      "symbol_name": "fastapi:GET /api/meta/changelog",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/meta/changelog",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/modules/health",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/modules.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/modules/health",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/modules/health",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/modules/health/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/modules.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/modules/health/{module_path:path}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/modules/health/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/overview-summary",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/overview.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/overview-summary",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/overview-summary",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/owners",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/owners.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/owners",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/owners",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/owners/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/owners.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/owners/{owner_key:path}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/owners/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/pages/lookup",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/pages.py",
+      "symbol_name": "fastapi:GET /api/pages/lookup",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/pages/lookup",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/pages/lookup/versions",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/pages.py",
+      "symbol_name": "fastapi:GET /api/pages/lookup/versions",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/pages/lookup/versions",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/pages/lookup/notes",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/pages.py",
+      "symbol_name": "fastapi:PATCH /api/pages/lookup/notes",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/pages/lookup/notes",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/pages/lookup/regenerate",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/pages.py",
+      "symbol_name": "fastapi:POST /api/pages/lookup/regenerate",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/pages/lookup/regenerate",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/pages/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/pages.py",
+      "symbol_name": "fastapi:GET /api/pages/{page_id:path}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/pages/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/providers/active",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/providers.py",
+      "symbol_name": "fastapi:PATCH /api/providers/active",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/providers/active",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/providers/{param}/key",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/providers.py",
+      "symbol_name": "fastapi:POST /api/providers/{provider_id}/key",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/providers/{param}/key",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::DELETE::/api/providers/{param}/key",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/providers.py",
+      "symbol_name": "fastapi:DELETE /api/providers/{provider_id}/key",
+      "confidence": 0.85,
+      "meta": {
+        "method": "DELETE",
+        "path": "/api/providers/{param}/key",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/refactoring/targets",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/refactoring.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/refactoring/targets",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/refactoring/targets",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/refactoring/settings",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/refactoring.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/refactoring/settings",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/refactoring/settings",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PUT::/api/repos/{param}/refactoring/settings",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/refactoring.py",
+      "symbol_name": "fastapi:PUT /api/repos/{repo_id}/refactoring/settings",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PUT",
+        "path": "/api/repos/{param}/refactoring/settings",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/refactoring/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/refactoring.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/refactoring/{suggestion_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/refactoring/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/refactoring/{param}/generate-code",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/refactoring.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/refactoring/{suggestion_id}/generate-code",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/refactoring/{param}/generate-code",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::PATCH::/api/repos/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:PATCH /api/repos/{repo_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "PATCH",
+        "path": "/api/repos/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::DELETE::/api/repos/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:DELETE /api/repos/{repo_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "DELETE",
+        "path": "/api/repos/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/stats",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/stats",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/stats",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/sync",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/sync",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/sync",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/repos/{param}/full-resync",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:POST /api/repos/{repo_id}/full-resync",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/repos/{param}/full-resync",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/export",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/export",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/export",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/file-content",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/repos.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/file-content",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/file-content",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/security",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/security.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/security",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/security",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/stats/highlights",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/stats.py",
+      "symbol_name": "fastapi:GET /api/repos/{repo_id}/stats/highlights",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/stats/highlights",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/symbols/detail",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/symbols.py",
+      "symbol_name": "fastapi:GET /api/symbols/detail",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/symbols/detail",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/symbols/by-name/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/symbols.py",
+      "symbol_name": "fastapi:GET /api/symbols/by-name/{name}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/symbols/by-name/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/symbols/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/symbols.py",
+      "symbol_name": "fastapi:GET /api/symbols/{symbol_db_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/symbols/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/webhooks/github",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/webhooks.py",
+      "symbol_name": "fastapi:POST /api/webhooks/github",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/webhooks/github",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/webhooks/gitlab",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/webhooks.py",
+      "symbol_name": "fastapi:POST /api/webhooks/gitlab",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/webhooks/gitlab",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/contracts",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/contracts",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/contracts",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/co-changes",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/co-changes",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/co-changes",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/graph",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/graph",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/graph",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/system-graph",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/system-graph",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/system-graph",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/diagnostics",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/diagnostics",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/diagnostics",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/blast-radius",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/blast-radius",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/blast-radius",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/breaking-changes",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/breaking-changes",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/breaking-changes",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/conformance",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/conformance",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/conformance",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/workspace/architecture",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:GET /api/workspace/architecture",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/api/workspace/architecture",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::POST::/api/workspace/sync",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/workspace.py",
+      "symbol_name": "fastapi:POST /api/workspace/sync",
+      "confidence": 0.85,
+      "meta": {
+        "method": "POST",
+        "path": "/api/workspace/sync",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/architecture",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/community.py",
+      "symbol_name": "fastapi:GET /{repo_id}/architecture",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/architecture",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/communities/{param}/slice",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/community.py",
+      "symbol_name": "fastapi:GET /{repo_id}/communities/{community_id}/slice",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/communities/{param}/slice",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/communities",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/community.py",
+      "symbol_name": "fastapi:GET /{repo_id}/communities",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/communities",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/communities/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/community.py",
+      "symbol_name": "fastapi:GET /{repo_id}/communities/{community_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/communities/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/nodes/search",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/full_graph.py",
+      "symbol_name": "fastapi:GET /{repo_id}/nodes/search",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/nodes/search",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/full_graph.py",
+      "symbol_name": "fastapi:GET /{repo_id}",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/metrics",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/intelligence.py",
+      "symbol_name": "fastapi:GET /{repo_id}/metrics",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/metrics",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/callers-callees",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/intelligence.py",
+      "symbol_name": "fastapi:GET /{repo_id}/callers-callees",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/callers-callees",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/execution-flows",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/intelligence.py",
+      "symbol_name": "fastapi:GET /{repo_id}/execution-flows",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/execution-flows",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/modules",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/module_graph.py",
+      "symbol_name": "fastapi:GET /{repo_id}/modules",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/modules",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/ego",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/neighborhoods.py",
+      "symbol_name": "fastapi:GET /{repo_id}/ego",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/ego",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/entry-points",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/neighborhoods.py",
+      "symbol_name": "fastapi:GET /{repo_id}/entry-points",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/entry-points",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/dead-nodes",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/neighborhoods.py",
+      "symbol_name": "fastapi:GET /{repo_id}/dead-nodes",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/dead-nodes",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/hot-files",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/neighborhoods.py",
+      "symbol_name": "fastapi:GET /{repo_id}/hot-files",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/hot-files",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/{param}/path",
+      "contract_type": "http",
+      "role": "provider",
+      "file_path": "packages/server/src/repowise/server/routers/graph/path.py",
+      "symbol_name": "fastapi:GET /{repo_id}/path",
+      "confidence": 0.85,
+      "meta": {
+        "method": "GET",
+        "path": "/{param}/path",
+        "framework": "fastapi"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/repos/{param}/file-content",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/web/src/components/architecture/c4-view.tsx",
+      "symbol_name": "fetch:GET ${apiBase}/api/repos/${repoId}/file-content?",
+      "confidence": 0.75,
+      "service": "packages/web",
+      "meta": {
+        "method": "GET",
+        "path": "/api/repos/{param}/file-content",
+        "client": "fetch",
+        "base_stripped": true,
+        "base_token": "apiBase"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/health",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/web/src/components/settings/provider-section.tsx",
+      "symbol_name": "fetch:GET /api/health",
+      "confidence": 0.75,
+      "service": "packages/web",
+      "meta": {
+        "method": "GET",
+        "path": "/api/health",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "http::GET::/api/health",
+      "contract_type": "http",
+      "role": "consumer",
+      "file_path": "packages/web/src/components/settings/provider-section.tsx",
+      "symbol_name": "fetch:GET /api/health",
+      "confidence": 0.75,
+      "service": "packages/web",
+      "meta": {
+        "method": "GET",
+        "path": "/api/health",
+        "client": "fetch"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "grpc::newBlocking/*",
+      "contract_type": "grpc",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/grpc/java.py",
+      "symbol_name": "py:newBlockingStub",
+      "confidence": 0.7,
+      "service": "packages/core",
+      "meta": {
+        "service": "newBlocking",
+        "source": "py_stub"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "grpc::AuthService/*",
+      "contract_type": "grpc",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/grpc/python.py",
+      "symbol_name": "py:add_AuthServiceServicer_to_server",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "service": "AuthService",
+        "source": "py_servicer"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "grpc::AuthService/*",
+      "contract_type": "grpc",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/grpc/python.py",
+      "symbol_name": "py:AuthServiceStub",
+      "confidence": 0.7,
+      "service": "packages/core",
+      "meta": {
+        "service": "AuthService",
+        "source": "py_stub"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::orders",
+      "contract_type": "topic",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "@KafkaListener('orders')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "orders",
+        "broker": "kafka"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::orders",
+      "contract_type": "topic",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "kafkaTemplate.send('orders')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "orders",
+        "broker": "kafka"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::jobs",
+      "contract_type": "topic",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "@RabbitListener('jobs')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "jobs",
+        "broker": "rabbitmq"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::exchange",
+      "contract_type": "topic",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "rabbitTemplate.convertAndSend('exchange')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "exchange",
+        "broker": "rabbitmq"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::queue",
+      "contract_type": "topic",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "channel.consume('queue')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "queue",
+        "broker": "rabbitmq"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::queue",
+      "contract_type": "topic",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "channel.sendToQueue('queue')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "queue",
+        "broker": "rabbitmq"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::events",
+      "contract_type": "topic",
+      "role": "provider",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "basic_publish('events')",
+      "confidence": 0.7,
+      "service": "packages/core",
+      "meta": {
+        "topic": "events",
+        "broker": "rabbitmq"
+      }
+    },
+    {
+      "repo": "repowise",
+      "contract_id": "topic::events",
+      "contract_type": "topic",
+      "role": "consumer",
+      "file_path": "packages/core/src/repowise/core/workspace/extractors/topic_extractor.py",
+      "symbol_name": "nc.Subscribe('events')",
+      "confidence": 0.8,
+      "service": "packages/core",
+      "meta": {
+        "topic": "events",
+        "broker": "nats"
+      }
+    }
+  ],
+  "contract_links": [
+    {
+      "contract_id": "http::GET::/api/repos/{param}/chat/conversations/{param}",
+      "contract_type": "http",
+      "match_type": "exact",
+      "confidence": 0.65,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/chat.py",
+      "provider_symbol": "fastapi:GET /api/repos/{repo_id}/chat/conversations/{conversation_id}",
+      "consumer_repo": "repowise",
+      "consumer_file": "packages/api-client/src/chat.ts",
+      "consumer_symbol": "wrapper:GET /api/repos/${repoId}/chat/conversations/${conversationId}",
+      "consumer_service": "packages/api-client"
+    },
+    {
+      "contract_id": "http::GET::/api/repos/{param}/co-changes",
+      "contract_type": "http",
+      "match_type": "exact",
+      "confidence": 0.65,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/git.py",
+      "provider_symbol": "fastapi:GET /api/repos/{repo_id}/co-changes",
+      "consumer_repo": "repowise",
+      "consumer_file": "packages/api-client/src/git.ts",
+      "consumer_symbol": "wrapper:GET /api/repos/${repoId}/co-changes",
+      "consumer_service": "packages/api-client"
+    },
+    {
+      "contract_id": "http::GET::/api/graph/{param}/c4/mermaid",
+      "contract_type": "http",
+      "match_type": "exact",
+      "confidence": 0.65,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/c4.py",
+      "provider_symbol": "fastapi:GET /api/graph/{repo_id}/c4/mermaid",
+      "consumer_repo": "repowise",
+      "consumer_file": "packages/api-client/src/c4.ts",
+      "consumer_symbol": "wrapper:GET ${BASE_URL}/api/graph/${repoId}/c4/mermaid?${params.toString()}",
+      "consumer_service": "packages/api-client"
+    },
+    {
+      "contract_id": "http::GET::/api/repos/{param}/file-content",
+      "contract_type": "http",
+      "match_type": "exact",
+      "confidence": 0.75,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/repos.py",
+      "provider_symbol": "fastapi:GET /api/repos/{repo_id}/file-content",
+      "consumer_repo": "repowise",
+      "consumer_file": "packages/web/src/components/architecture/c4-view.tsx",
+      "consumer_symbol": "fetch:GET ${apiBase}/api/repos/${repoId}/file-content?",
+      "consumer_service": "packages/web"
+    },
+    {
+      "contract_id": "http::GET::/api/health",
+      "contract_type": "http",
+      "match_type": "candidate",
+      "confidence": 0.45,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/health.py",
+      "provider_symbol": "fastapi:GET /health",
+      "consumer_repo": "arch-mk2",
+      "consumer_file": "apps/portal/components/system/SystemTray.tsx",
+      "consumer_symbol": "fetch:GET /api/health",
+      "consumer_service": "apps/portal"
+    },
+    {
+      "contract_id": "http::GET::/api/health",
+      "contract_type": "http",
+      "match_type": "candidate",
+      "confidence": 0.45,
+      "provider_repo": "repowise",
+      "provider_file": "packages/server/src/repowise/server/routers/health.py",
+      "provider_symbol": "fastapi:GET /health",
+      "consumer_repo": "repowise",
+      "consumer_file": "packages/web/src/components/settings/provider-section.tsx",
+      "consumer_symbol": "fetch:GET /api/health",
+      "consumer_service": "packages/web"
+    }
+  ]
+}
