@@ -41,7 +41,6 @@
 .glass-badge,
 .glass-modal,
 .glass-video,
-.glass-dark,
 .glass-macos,
 .layer-telemetry-dock,
 .layer-signin-card {
@@ -638,28 +637,6 @@
   transform: translateY(-1px);
 }
 
-/* Dark glass — opaque dark panels for data-heavy dashboards */
-
-.glass-dark {
-  background:
-    var(--dark-glass-surface) padding-box,
-    var(--glass-border-gradient) border-box;
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid transparent;
-  box-shadow:
-    var(--dark-glass-sheen),
-    0 8px 32px -8px rgba(0, 0, 0, 0.35);
-  border-radius: var(--radius-card);
-  color: var(--text-on-dark-glass);
-}
-
-.glass-dark-hover:hover {
-  background:
-    var(--dark-glass-surface-hover) padding-box,
-    var(--glass-border-gradient) border-box;
-  transform: translateY(-1px);
-}
 
 /* ── macOS Glass Utility — Premium Translucency ── */
 
@@ -1373,8 +1350,7 @@ body.focus-mode .route-bg-grain {
   }
 }
 
-/* Focus-mode: dark theme shifts for liquid glass variants */
-body.focus-mode .liquid-glass,
+/* Focus-mode shifts for liquid glass variants */
 body.focus-mode .liquid-glass-light,
 body.focus-mode .liquid-glass-elevated,
 body.focus-mode .liquid-glass-pane-rounded,

@@ -194,7 +194,7 @@ describe("proxy", () => {
 
   it("passes through static file requests", async () => {
     buildMiddlewareMock();
-    const req = makeRequest("/logo.png");
+    const req = makeRequest("/assets/logo.png");
     const res = await proxy(req);
     expect(res).toBeDefined();
     expect(res.status).not.toBe(307);

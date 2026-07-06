@@ -29,7 +29,6 @@ import {
   StickyNote,
   // Automation
   Workflow,
-  Bot,
   // General
   ExternalLink,
   User,
@@ -164,13 +163,6 @@ const EXTERNAL_LIST = [
     url: "http://localhost:5678",
     colorClass: "text-[#ea4b2a]",
   },
-  {
-    name: "flowise",
-    displayName: "Flowise AI",
-    icon: Bot,
-    url: "http://localhost:3001",
-    colorClass: "text-[#3ecf8e]",
-  },
 ] as const;
 
 const NAV_BTN =
@@ -224,7 +216,7 @@ export function MacMenuBar({
                 className="relative w-11 h-11 -ml-1 rounded-full bg-white border border-black/10 shadow-window flex items-center justify-center hover:bg-gray-50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)] transition-all duration-150 ease-in-out cursor-default"
               >
                 <img
-                  src={isFocusMode ? "/logo-focused.jpeg" : "/logo.png"}
+                  src={isFocusMode ? "/assets/logo-focused.jpeg" : "/assets/logo.png"}
                   alt="Arch Logo"
                   className="w-6 h-6 object-contain"
                 />

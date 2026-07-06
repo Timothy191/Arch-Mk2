@@ -195,7 +195,7 @@ export function FleetTab() {
         </h2>
         <Button
           onClick={handleAdd}
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Machine
@@ -486,7 +486,7 @@ export function FleetTab() {
               className={
                 pendingToggle?.active
                   ? "bg-accent-red hover:bg-accent-red/90 text-white"
-                  : "bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+                  : "bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
               }
               onClick={handleConfirmToggle}
             >
@@ -717,7 +717,7 @@ function MachineForm({
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           {saving ? "Saving…" : machine ? "Update" : "Add Machine"}
         </Button>

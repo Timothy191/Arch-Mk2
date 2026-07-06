@@ -5,3 +5,4 @@
 @import "./transitions.css" layer(theme);
 @import "./focus.css" layer(theme);
 @import "./reset.css" layer(theme);
+@import "./layout.css" layer(theme);

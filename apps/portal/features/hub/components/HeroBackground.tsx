@@ -12,8 +12,8 @@ export function HeroBackground() {
       className="absolute inset-0 pointer-events-none overflow-hidden isolate"
       aria-hidden="true"
     >
-      {/* Light ambient base */}
-      <div className="absolute inset-0 bg-slate-50" />
+      {/* Light ambient base - removed bg-slate-50 to let background video show through */}
+      <div className="absolute inset-0 bg-transparent" />
 
       {/* Large ambient blob — top-left */}
       <div

@@ -42,16 +42,11 @@ Components are migrated as they are touched. No hard codemod (155 references in 
 
 ## 003 — Light-only `color-scheme: light` as default
 
-**Decision**: `variables.css` defines only a `:root` (light) token set. Dark mode architecture
-(`[data-theme="dark"]` block) is scaffolded in Phase 3 but ships disabled.
+**Decision**: `variables.css` defines only a `:root` (light) token set. All scaffolding or plans for dark mode have been explicitly removed.
 
-**Why**: The portal is a mining control-room operational tool. The current requirement is
-light-only (macOS Ventura/Sonoma). The dark mode architecture is being built correctly from the
-start (data-attribute approach, semantic aliases) so it can be enabled without component rewrites
-when the requirement changes.
+**Why**: The portal is a mining control-room operational tool. The requirement is strictly light-only (macOS Ventura/Sonoma). Maintaining "dark mode ready" tokens creates unnecessary complexity, unused CSS, and architectural debt. The entire visual language is optimized for white translucency, liquid glass, and high-contrast ambient shadows.
 
-**Implication**: Components reference only Tier 2 semantic tokens. When the dark block lands, they
-automatically update. Zero component changes required.
+**Implication**: Components reference only semantic tokens. No dark-mode inversions or `-dark` variants are supported.
 
 ---
 

@@ -56,7 +56,6 @@ const envSchema = z.object({
   N8N_URL: z.string().url().optional(),
   N8N_USER: z.string().optional(),
   N8N_PASSWORD: z.string().optional(),
-  FLOWISE_URL: z.string().url().optional(),
   NEXT_PUBLIC_FUXA_URL: z.string().url().optional(),
   NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID: z.string().optional(),
 
@@ -142,7 +141,6 @@ function parseEnv(): EnvVars {
     N8N_URL: process.env.N8N_URL,
     N8N_USER: process.env.N8N_USER,
     N8N_PASSWORD: process.env.N8N_PASSWORD,
-    FLOWISE_URL: process.env.FLOWISE_URL,
     NEXT_PUBLIC_FUXA_URL: process.env.NEXT_PUBLIC_FUXA_URL,
     NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID:
       process.env.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID,

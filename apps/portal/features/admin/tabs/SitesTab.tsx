@@ -117,7 +117,7 @@ export function SitesTab() {
         </h2>
         <Button
           onClick={handleAdd}
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Site
@@ -272,7 +272,7 @@ export function SitesTab() {
               className={
                 pendingToggle?.active
                   ? "bg-accent-red hover:bg-accent-red/90 text-white"
-                  : "bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+                  : "bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
               }
               onClick={handleConfirmToggle}
             >
@@ -392,7 +392,7 @@ function SiteForm({
         <Button
           type="submit"
           disabled={saving}
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           {saving ? "Saving…" : site ? "Update" : "Add Site"}
         </Button>

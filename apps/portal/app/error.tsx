@@ -71,7 +71,7 @@ export default function RootError({ error, reset }: RootErrorProps) {
       <div className="max-w-md w-full text-center space-y-6">
         <div className="flex justify-center">
           <Image
-            src="/404-error.png"
+            src="/assets/error-pages/404-error.png"
             alt="Error Graphic"
             width={120}
             height={120}

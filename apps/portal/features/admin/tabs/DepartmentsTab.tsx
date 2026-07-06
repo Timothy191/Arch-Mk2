@@ -112,7 +112,7 @@ export function DepartmentsTab() {
         </h2>
         <Button
           onClick={handleCreate}
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Department
@@ -384,7 +384,7 @@ function DepartmentForm({
         </Button>
         <Button
           type="submit"
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           {department ? "Update" : "Create"}
         </Button>

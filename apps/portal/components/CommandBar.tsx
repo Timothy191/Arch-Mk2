@@ -20,7 +20,6 @@ import {
   LogOut,
   User,
   Workflow,
-  Bot,
 } from "lucide-react";
 
 interface CommandItem {
@@ -134,13 +133,6 @@ const TOOLS_COMMANDS: CommandItem[] = [
     href: "http://localhost:5678",
     category: "Tools",
     icon: <Workflow className="w-4 h-4" />,
-  },
-  {
-    id: "tool-flowise",
-    label: "Flowise",
-    href: "http://localhost:3001",
-    category: "Tools",
-    icon: <Bot className="w-4 h-4" />,
   },
 ];
 

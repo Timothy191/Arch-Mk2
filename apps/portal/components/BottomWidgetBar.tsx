@@ -19,7 +19,6 @@ import {
   Satellite,
   Shield,
   Briefcase,
-  Bot,
   Workflow,
   CheckSquare,
   ExternalLink,
@@ -194,12 +193,6 @@ const INNER_ITEMS = [
     label: "n8n",
     icon: Workflow,
     color: "text-[#ff6d5a]",
-  },
-  {
-    href: "http://localhost:3001",
-    label: "Flowise",
-    icon: Bot,
-    color: "text-[#3ecf8e]",
   },
 ];
 
@@ -493,25 +486,6 @@ function ToolsWheelItem({
             <ExternalLink className="h-3 w-3 opacity-40" />
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          asChild
-          className="cursor-pointer hover:bg-black/[0.04] focus:bg-black/[0.04] rounded-md mx-1 my-0.5"
-        >
-          <a
-            href="http://localhost:3001"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-between px-2 py-1.5"
-          >
-            <div className="flex items-center gap-2.5">
-              <Bot className="w-4 h-4 shrink-0 text-[#3ecf8e]" />
-              <span className="text-[13px] font-medium text-[var(--text-heading)]">
-                Flowise AI
-              </span>
-            </div>
-            <ExternalLink className="h-3 w-3 opacity-40" />
-          </a>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -737,7 +711,7 @@ export function BottomWidgetBar({
           )}
         >
           <Image
-            src={isFocusMode ? "/logo-focused.jpeg" : "/logo.png"}
+            src={isFocusMode ? "/assets/logo-focused.jpeg" : "/assets/logo.png"}
             alt="Arch"
             width={isTopMerged ? 18 : 28}
             height={isTopMerged ? 18 : 28}
@@ -779,7 +753,7 @@ export function BottomWidgetBar({
                   );
                 })}
 
-                {/* Inner ring: Operations, Tools, n8n, Flowise */}
+                {/* Inner ring: Operations, Tools, n8n */}
                 {INNER_ITEMS.map((item, i) => {
                   const angle = getAngle(i, INNER_ITEMS.length, dockPosition);
                   const radius = isLeftDocked

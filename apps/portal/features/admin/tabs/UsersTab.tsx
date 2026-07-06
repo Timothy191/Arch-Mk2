@@ -107,7 +107,7 @@ export function UsersTab() {
             className="pl-10 bg-[var(--bg-secondary)] border-[var(--border-default)]"
           />
         </div>
-        <Button className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]">
+        <Button className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]">
           <UserPlus className="w-4 h-4 mr-2" />
           Add Employee
         </Button>
@@ -351,7 +351,7 @@ function EditEmployeeForm({
               onClick={() => toggleAccessibleDept(dept.id)}
               className={`text-left px-3 py-2 rounded border text-sm ${
                 accessibleDepts.includes(dept.id)
-                  ? "bg-[var(--accent-emerald)] border-[var(--accent-emerald)] text-[var(--bg-void)]"
+                  ? "bg-[var(--accent-emerald)] border-[var(--accent-emerald)] text-[var(--bg-background)]"
                   : "bg-[var(--bg-secondary)] border-[var(--border-default)] text-[var(--text-body)]"
               }`}
             >
@@ -367,7 +367,7 @@ function EditEmployeeForm({
         </Button>
         <Button
           type="submit"
-          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-void)]"
+          className="bg-[var(--accent-emerald)] hover:bg-[var(--accent-green)] text-[var(--bg-background)]"
         >
           Save Changes
         </Button>

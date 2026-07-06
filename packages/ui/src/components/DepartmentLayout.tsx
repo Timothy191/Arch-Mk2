@@ -117,7 +117,7 @@ export function DepartmentLayout({
             <span>Back to Hub</span>
           </Link>
           <img
-            src={isFocusMode ? "/logo-focused.jpeg" : "/logo.png"}
+            src={isFocusMode ? "/assets/logo-focused.jpeg" : "/assets/logo.png"}
             alt="Arch Logo"
             className="w-4 h-4 object-contain opacity-60 mr-2"
           />

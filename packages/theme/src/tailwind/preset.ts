@@ -133,6 +133,11 @@ const archTheme: Config = {
             red: "var(--accent-red)", // --arch12 #ff3b30
             green: "var(--accent-green)", // --arch14 #34c759
           },
+          mac: {
+            red: "var(--mac-red)",
+            yellow: "var(--mac-yellow)",
+            green: "var(--mac-green)",
+          },
         },
 
         // shadcn/ui HSL variable colors
@@ -214,6 +219,7 @@ const archTheme: Config = {
             emphasis: "hsl(var(--tremor-content-emphasis))",
             strong: "hsl(var(--tremor-content-strong))",
             inverted: "hsl(var(--tremor-content-inverted))",
+            inverted: "hsl(var(--tremor-content-inverted))",
           },
         },
         hud: {
@@ -279,6 +285,9 @@ const archTheme: Config = {
         "tremor-default": ["0.875rem", { lineHeight: "1.25rem" }],
         "tremor-title": ["1.125rem", { lineHeight: "1.75rem" }],
         "tremor-metric": ["1.875rem", { lineHeight: "2.25rem" }],
+        "mac-micro": ["11px", { lineHeight: "14px", letterSpacing: "0.02em" }],
+        "mac-caption": ["12px", { lineHeight: "16px" }],
+        "mac-body": ["13px", { lineHeight: "18px" }],
       },
       borderRadius: {
         sm: "var(--radius-sm)",

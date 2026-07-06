@@ -25,7 +25,7 @@ export default function GlobalError({
           <div className="flex justify-center">
             {/* Standard img tag instead of next/image to ensure absolute boot resilience */}
             <img
-              src="/404-error.png"
+              src="/assets/error-pages/404-error.png"
               alt="System Error"
               className="w-[120px] h-[120px] opacity-80"
             />
