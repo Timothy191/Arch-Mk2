@@ -1,6 +1,7 @@
 -- ============================================
 -- Seed Data: System Administrator Account
 -- ============================================
+-- AGENT-TRACE: admin email is the owner's (timothyoniel558@gmail.com); changed from admin@plantcor.os on 2026-07-07 per owner request. Password: Yugioh@123#.
 
 DO $$
 DECLARE
@@ -11,7 +12,7 @@ BEGIN
   CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
   -- 1. Create or update the user in auth.users
-  SELECT id INTO admin_uid FROM auth.users WHERE email ILIKE 'admin@plantcor.os';
+  SELECT id INTO admin_uid FROM auth.users WHERE email ILIKE 'timothyoniel558@gmail.com';
 
   IF admin_uid IS NULL THEN
     admin_uid := gen_random_uuid();
@@ -34,7 +35,7 @@ BEGIN
     ) VALUES (
       admin_uid,
       '00000000-0000-0000-0000-000000000000',
-      'admin@plantcor.os',
+      'timothyoniel558@gmail.com',
       crypt('Yugioh@123#', gen_salt('bf')),
       now(),
       '{"provider":"email","providers":["email"]}',
@@ -49,11 +50,11 @@ BEGIN
       ''
     );
   ELSE
-    -- If exists, update password and ensure email capitalization is Admin@plantcor.os
+    -- If exists, update password and email
     UPDATE auth.users
     SET 
       encrypted_password = crypt('Yugioh@123#', gen_salt('bf')),
-      email = 'admin@plantcor.os'
+      email = 'timothyoniel558@gmail.com'
     WHERE id = admin_uid;
   END IF;
 

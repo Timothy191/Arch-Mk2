@@ -98,7 +98,9 @@ function isPlaceholder(value) {
   if (!value) return true;
   const lower = value.toLowerCase();
   return (
-    lower.includes("your-") ||
+    // AGENT-TRACE: match both hyphen (`your-anon-key`) and underscore (`your_anon_key`) placeholders —
+    // the .env.example templates use underscores, so the hyphen-only check let real placeholders slip through.
+    /your[-_]/.test(lower) ||
     lower.includes("todo") ||
     lower.includes("changeme") ||
     lower === "..." ||

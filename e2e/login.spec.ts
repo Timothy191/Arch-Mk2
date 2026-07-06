@@ -162,7 +162,7 @@ test.describe("full login and reset password flows", () => {
   }) => {
     // 1. Invalid credentials flow
     await page.goto("/login");
-    await page.locator("input#email").fill("admin@plantcor.os");
+    await page.locator("input#email").fill("timothyoniel558@gmail.com");
     await page.locator("input#password").fill("wrong-password");
     await page
       .locator("form[data-testid='login-form'] button[type='submit']")
@@ -187,7 +187,7 @@ test.describe("full login and reset password flows", () => {
     await expect(page).toHaveURL(/.*\/reset-password/);
 
     // 3. Reset password submission
-    await page.locator("input#reset-email").fill("admin@plantcor.os");
+    await page.locator("input#reset-email").fill("timothyoniel558@gmail.com");
     await page.locator("button[type='submit']").click();
 
     // Verify "Check Your Email" screen or error alert
@@ -202,7 +202,7 @@ test.describe("full login and reset password flows", () => {
     await expect(page).toHaveURL(/.*\/login/);
 
     // 5. Successful login redirect
-    await page.locator("input#email").fill("admin@plantcor.os");
+    await page.locator("input#email").fill("timothyoniel558@gmail.com");
     await page.locator("input#password").fill("Yugioh@123#");
     await page
       .locator("form[data-testid='login-form'] button[type='submit']")

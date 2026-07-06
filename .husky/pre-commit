@@ -33,7 +33,7 @@ for agent_file in .github/agents/*.md; do
 done
 
 # 3. For staged changes in agentic-tools-mcp, require checksum update marker
-STAGED=$(git diff --cached --name-only | grep -c '\.agentic-tools-mcp/')
+STAGED=$(git diff --cached --name-only | grep -c '\.agentic-tools-mcp/' || true)
 if [ "$STAGED" -gt 0 ]; then
   echo "INFO: Agentic tools changed — updating checksums recommended post-commit"
 fi

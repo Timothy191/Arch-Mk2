@@ -10,8 +10,7 @@ Arch-Systems (Plantcor) is an industrial mining-operations portal. It is a **pnp
 | ------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------- |
 | `apps/portal`                                                                   | Next.js 16 operations dashboard (main app)           | `3000`, Turbopack dev                   |
 | `apps/api`                                                                      | NestJS 11 backend on Fastify 5                       | `3004` by default, global prefix `/api` |
-| `apps/cms`                                                                      | Payload CMS v3 on Next.js 16                         | `3001`                                  |
-| `apps/overview`                                                                 | Architecture / flow viewer (Next.js 16, React Flow)  | `3002`                                  |
+| `apps/ai-agents`                                                                | FastAPI CrewAI/LangGraph orchestration (stub)        | Python 3.11+, no fixed port              |
 | `packages/supabase`                                                             | Data access layer: `@supabase/ssr`, Kysely, typed DB | consumed by apps                        |
 | `packages/database`                                                             | SQL migrations source of truth ONLY                  | not imported directly by apps           |
 | `packages/theme`                                                                | OKLCH design tokens + Tailwind preset                | source: `src/css/variables.css`         |
@@ -30,7 +29,6 @@ Run everything from the repository root unless noted.
 | Install dependencies                             | `pnpm install`                                       |
 | Full dev stack (Supabase + Redis + API + Portal) | `pnpm dev`                                           |
 | Portal only, no Docker/Supabase                  | `pnpm dev --quick`                                   |
-| Dev + CMS + Overview                             | `pnpm dev --all` (or `--cms` / `--overview`)         |
 | Dev without the NestJS API                       | `pnpm dev --no-api`                                  |
 | Build all apps/packages                          | `pnpm build`                                         |
 | Type-check all                                   | `pnpm type-check`                                    |
@@ -49,8 +47,20 @@ Run everything from the repository root unless noted.
 | Start agentic-tools MCP server                   | `pnpm agentic-tools`                                 |
 | Start agentic-tools daemon                       | `pnpm agentic-tools:daemon`                          |
 | Bootstrap env template                           | `pnpm agentic-tools:setup`                           |
+| Dead-code / unused-export detection              | `pnpm knip` (or `pnpm knip:fix` to autofix)          |
+| Portal bundle analysis build                     | `pnpm analyze`                                       |
+| Generate DB docs                                  | `pnpm db:docs`                                       |
+| Monitoring HUD                                    | `pnpm monitor`                                       |
+| Grafana/Prometheus stack                          | `pnpm monitor:grafana` / `pnpm monitor:grafana-stop` |
+| Deploy (dev / staging / production)              | `pnpm deploy:dev` / `deploy:staging` / `deploy:production` |
+| Rollback a production deploy                      | `pnpm deploy:rollback`                               |
 
 Supabase helpers live in `packages/database/package.json` and `packages/supabase/package.json` (e.g. `pnpm --filter @repo/database supabase:start`, `supabase:reset`, `supabase:push`).
+
+### Test runners per app
+
+- **Both `apps/api` and `apps/portal` use Jest 30** (with `@swc/jest`). Distinguish them by file extension, not runner: `apps/api` specs are `*.spec.ts`, `apps/portal` tests are `*.test.ts(x)`.
+- **E2E**: Playwright against `http://localhost:3000` (`pnpm test:e2e`, requires `pnpm dev` running); visual snapshots under `e2e/visual/__snapshots__`, `maxDiffPixelRatio: 0.02`.
 
 ## High-Level Architecture
 
@@ -67,7 +77,7 @@ Supabase helpers live in `packages/database/package.json` and `packages/supabase
 - NestJS 11 on Fastify 5 with global prefix `/api`.
 - Swagger docs at `/api/docs` in non-production environments.
 - Health checks at `/api/health/live`.
-- Feature modules: `auth`, `admin`, `ai`, `jobs`, `webhooks`, `control-room`, `access-control`, `exports`, `health`, `observability`, `security`, `telemetry`, `weather`.
+- Feature modules: `auth`, `admin`, `ai`, `ai-bridge`, `queue`, `tools`, `jobs`, `webhooks`, `control-room`, `access-control`, `exports`, `health`, `observability`, `security`, `telemetry`, `weather`.
 - Uses `@repo/supabase/service-role` for DB access and `@repo/redis` for caching/rate-limiting.
 
 ### Data Layer
@@ -111,6 +121,8 @@ Supabase helpers live in `packages/database/package.json` and `packages/supabase
 7. **RepoWiki / Skills / Repowise / Sense:** Keep `.repowise` and `.repowise-workspace` synced with `./.aistack/tools/repowise/.venv/bin/repowise update -w --index-only` after significant changes. Maintain `AGENT_TRACER.md` files and the `.agentic-tools-mcp/` memory store.
 
 For workspace-wide agent rules (MCP servers, editor configs, monorepo orchestration), see `.agents/AGENTS.md`. For MCP server setup instructions, see `.vscode/README.md`.
+
+> **Note on `.claude/CLAUDE.md`:** that file is **auto-generated by Repowise** on every index (last-indexed date, entry points, hotspots, the Repowise/Sense MCP tool guide). Do not hand-edit it — it refreshes on `repowise update`. This `CLAUDE.md` is the hand-maintained source of truth.
 
 <!-- Add your custom instructions below. Repowise will never modify anything outside the REPOWISE markers. -->
 
