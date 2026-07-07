@@ -9,4 +9,15 @@ module.exports = {
   moduleNameMapper: {
     "^(\\.\\.?/.*)\\.js$": "$1",
   },
+  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.test.ts", "!src/**/*.d.ts"],
+  coverageDirectory: "coverage",
+  coverageReporters: ["text", "lcov", "html"],
+  coverageThreshold: {
+    global: {
+      lines: 60,
+      branches: 50,
+      functions: 50,
+      statements: 60,
+    },
+  },
 };

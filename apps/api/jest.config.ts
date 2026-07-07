@@ -21,9 +21,17 @@ const config: Config = {
       },
     ],
   },
-  collectCoverageFrom: ["**/*.(t|j)s"],
+  collectCoverageFrom: ["**/*.(t|j)s", "!**/*.spec.ts", "!**/*.test.ts", "!**/*.d.ts"],
   coverageDirectory: "../coverage",
   coverageReporters: ["text", "lcov", "html"],
+  coverageThreshold: {
+    global: {
+      lines: 30,
+      branches: 20,
+      functions: 25,
+      statements: 30,
+    },
+  },
   testEnvironment: "node",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/$1",

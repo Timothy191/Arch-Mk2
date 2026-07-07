@@ -61,18 +61,18 @@ jobs:
           node-version: "22"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - name: Test API services
+      - name: Test API services with coverage
         working-directory: apps/api
-        run: npx jest --no-cache --forceExit --verbose 2>&1 | tail -20
-      - name: Test @repo/supabase
+        run: npx jest --no-cache --forceExit --verbose --coverage 2>&1 | tail -20
+      - name: Test @repo/supabase with coverage
         working-directory: packages/supabase
-        run: npx jest --no-cache --verbose 2>&1 | tail -10
-      - name: Test @repo/redis
+        run: npx jest --no-cache --verbose --coverage 2>&1 | tail -10
+      - name: Test @repo/redis with coverage
         working-directory: packages/redis
-        run: ./node_modules/.bin/jest --no-cache --verbose 2>&1 | tail -10
-      - name: Test @repo/rate-limiter
+        run: ./node_modules/.bin/jest --no-cache --verbose --coverage 2>&1 | tail -10
+      - name: Test @repo/rate-limiter with coverage
         working-directory: packages/rate-limiter
-        run: ./node_modules/.bin/jest --no-cache --verbose 2>&1 | tail -10
+        run: ./node_modules/.bin/jest --no-cache --verbose --coverage 2>&1 | tail -10
 
   build:
     name: Build API
