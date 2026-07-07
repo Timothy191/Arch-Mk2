@@ -2,12 +2,16 @@ import { startMcpServer } from "./mcp/server.js";
 import { startHealthPoller } from "./poller/health-poller.js";
 import { startMetricsPoller } from "./poller/metrics-poller.js";
 import { runAuditCheck } from "./poller/audit-poller.js";
-import { startRedisSubscriber, setEventHandler } from "./subscriber/redis-subscriber.js";
+import {
+  startRedisSubscriber,
+  setEventHandler,
+} from "./subscriber/redis-subscriber.js";
 import {
   handleTriggerEvent,
   periodicIncidentCheck,
 } from "./incident/engine.js";
 import { Logger } from "./logger.js";
+import { getConfiguredAgents } from "./dispatcher/agent-dispatcher.js";
 
 const logger = new Logger("main");
 
@@ -25,7 +29,9 @@ async function main(): Promise<void> {
         `Initial audit complete: ${result.totalIssues} issue(s) across ${result.tablesScanned}/${result.totalTables} tables`,
       );
     } else {
-      logger.warn("Initial audit returned no result (backend may be unavailable)");
+      logger.warn(
+        "Initial audit returned no result (backend may be unavailable)",
+      );
     }
   });
 
@@ -47,6 +53,16 @@ async function main(): Promise<void> {
       );
     });
   }, incidentCheckIntervalMs);
+
+  // 3b. Log available TUI agents
+  const availableAgents = getConfiguredAgents().map(
+    (a) => `${a.id}${a.autoApprove ? " (auto)" : ""}`,
+  );
+  if (availableAgents.length > 0) {
+    logger.info(`TUI agents available: ${availableAgents.join(", ")}`);
+  } else {
+    logger.warn("No TUI agents configured — agent dispatch disabled");
+  }
 
   // 4. Start MCP server (stdio — TUI agents connect via pipe)
   await startMcpServer().catch((error) => {

@@ -1,5 +1,13 @@
 import { z } from "zod";
 import { opsClient } from "../ops-client.js";
+import type { AgentConfig, AgentDispatch } from "../dispatcher/types.js";
+import {
+  getConfiguredAgents,
+  getDispatch,
+  getDispatches,
+  dispatchTask,
+  resolveLatestDispatches,
+} from "../dispatcher/agent-dispatcher.js";
 import type { SystemSummary } from "../ops-client.js";
 
 // ── Schema definitions ─────────────────────────────────────
@@ -18,7 +26,10 @@ const rateLimitSchema = {
 };
 
 const triggerAgentSchema = {
-  triggerType: z.string().min(1).describe("Type of event, e.g. 'INCIDENT_DETECTED'"),
+  triggerType: z
+    .string()
+    .min(1)
+    .describe("Type of event, e.g. 'INCIDENT_DETECTED'"),
   severity: z.enum(["info", "warning", "critical"]).describe("Severity level"),
 };
 
@@ -39,9 +50,7 @@ const metricsFilterSchema = {
 
 // ── Tool handler type ──────────────────────────────────────
 
-export type ToolHandler = (
-  args: Record<string, unknown>,
-) => Promise<unknown>;
+export type ToolHandler = (args: Record<string, unknown>) => Promise<unknown>;
 
 export interface ToolDefinition {
   name: string;
@@ -148,8 +157,9 @@ export function defineTools(): ToolDefinition[] {
       },
       handler: async (args: Record<string, unknown>) => {
         const keys = args["keys"];
-        const keyList: string[] | undefined =
-          Array.isArray(keys) ? keys.map(String) : undefined;
+        const keyList: string[] | undefined = Array.isArray(keys)
+          ? keys.map(String)
+          : undefined;
         return opsClient.readConfig(keyList);
       },
     },
@@ -200,7 +210,8 @@ export function defineTools(): ToolDefinition[] {
       },
       handler: async (args: Record<string, unknown>) => {
         // Metrics are fetched directly from the NestJS metrics endpoint
-        const metricsUrl = process.env.METRICS_URL ??
+        const metricsUrl =
+          process.env.METRICS_URL ??
           "http://host.docker.internal:3001/api/metrics";
         const response = await fetch(metricsUrl);
         if (!response.ok) {
@@ -211,10 +222,7 @@ export function defineTools(): ToolDefinition[] {
         if (typeof filter === "string" && filter.length > 0) {
           return text
             .split("\n")
-            .filter(
-              (line) =>
-                line.startsWith("#") || line.includes(filter),
-            )
+            .filter((line) => line.startsWith("#") || line.includes(filter))
             .join("\n");
         }
         return text;
@@ -232,7 +240,8 @@ export function defineTools(): ToolDefinition[] {
         required: [],
       },
       handler: async () => {
-        const healthUrl = process.env.HEALTH_URL ??
+        const healthUrl =
+          process.env.HEALTH_URL ??
           "http://host.docker.internal:3001/api/health";
         const [healthRes, liveRes] = await Promise.all([
           fetch(healthUrl).catch((): { ok: false; statusText: string } => ({
@@ -247,10 +256,13 @@ export function defineTools(): ToolDefinition[] {
           ),
         ]);
         let healthBody: Record<string, unknown> | null = null;
-        if (healthRes.ok && typeof (healthRes as Response).json === "function") {
-          healthBody = await (healthRes as Response)
+        if (
+          healthRes.ok &&
+          typeof (healthRes as Response).json === "function"
+        ) {
+          healthBody = (await (healthRes as Response)
             .json()
-            .catch((): null => null) as Record<string, unknown> | null;
+            .catch((): null => null)) as Record<string, unknown> | null;
         }
         return {
           liveness: liveRes.ok ? "ok" : "unreachable",
@@ -376,6 +388,154 @@ export function defineTools(): ToolDefinition[] {
           throw new Error("SQL must be at least 4 characters");
         }
         return opsClient.runSafeQuery(sql);
+      },
+    },
+
+    // 13. Agent Dispatch — Fire-and-forget task to an Agent
+    {
+      name: "agent-dispatch",
+      description:
+        "Manually dispatch a task to a TUI agent (opencode/kilo/agy) for investigation or repair. " +
+        "Use when an incident requires deeper analysis or code changes. The agent receives the task " +
+        "prompt and works autonomously. Check dispatch-status for results.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          task: {
+            type: "string",
+            description:
+              "Short label for the task, e.g. 'Investigate high error rate'",
+          },
+          prompt: {
+            type: "string",
+            description:
+              "Detailed instructions for the agent — include context, logs, and expected actions",
+          },
+          agent: {
+            type: "string",
+            enum: ["opencode", "kilo", "agy"],
+            description: "Preferred agent (auto-selected if omitted)",
+          },
+        },
+        required: ["task", "prompt"],
+      },
+      handler: async (args: Record<string, unknown>) => {
+        const task = String(args["task"] ?? "");
+        const prompt = String(args["prompt"] ?? "");
+        if (!task) throw new Error("task is required");
+        if (!prompt) throw new Error("prompt is required");
+        const preferredAgent = args["agent"];
+        const agentId =
+          typeof preferredAgent === "string" &&
+          ["opencode", "kilo", "agy"].includes(preferredAgent)
+            ? (preferredAgent as "opencode" | "kilo" | "agy")
+            : undefined;
+
+        const agents = getConfiguredAgents();
+        if (agents.length === 0) {
+          throw new Error("No TUI agents are enabled on this gateway");
+        }
+
+        const dispatch = await dispatchTask({
+          task,
+          prompt,
+          agent: agentId,
+          triggeredBy: "mcp",
+        });
+        return {
+          dispatchId: dispatch.id,
+          agent: dispatch.agent,
+          status: dispatch.status,
+          message: `Task dispatched to ${dispatch.agent} (id: ${dispatch.id})`,
+        };
+      },
+    },
+
+    // 14. Agent — List available agents
+    {
+      name: "agent-list",
+      description:
+        "List all configured TUI agents, their enabled status, and which are currently processing tasks. " +
+        "Use to verify agent availability before dispatching.",
+      inputSchema: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+      handler: async () => {
+        const agents = getConfiguredAgents();
+        const allDispatches = getDispatches();
+        const runningDispatches = allDispatches.filter(
+          (d) => d.status === "running",
+        );
+        return {
+          agents: agents.map((a) => ({
+            id: a.id,
+            enabled: a.enabled,
+            autoApprove: a.autoApprove,
+            timeoutMs: a.timeoutMs,
+            activeCount: runningDispatches.filter((d) => d.agent === a.id)
+              .length,
+          })),
+        };
+      },
+    },
+
+    // 15. Agent dispatch status — Check previous dispatch results
+    {
+      name: "dispatch-status",
+      description:
+        "Check the status of dispatched agent tasks. Lists recent dispatches with their status " +
+        "(pending/running/completed/failed). Optionally filter by dispatch ID for full detail.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          dispatchId: {
+            type: "string",
+            description: "Specific dispatch ID to check (omit for recent list)",
+          },
+          limit: {
+            type: "number",
+            description: "Max recent dispatches to return (default 5)",
+          },
+        },
+      },
+      handler: async (args: Record<string, unknown>) => {
+        const dispatchId = String(args["dispatchId"] ?? "");
+        if (dispatchId) {
+          const dispatch = getDispatch(dispatchId);
+          if (!dispatch) {
+            return { found: false, dispatchId };
+          }
+          return {
+            found: true,
+            dispatch: {
+              id: dispatch.id,
+              agent: dispatch.agent,
+              task: dispatch.task,
+              status: dispatch.status,
+              triggeredBy: dispatch.triggeredBy,
+              createdAt: dispatch.createdAt,
+              completedAt: dispatch.completedAt,
+              output: dispatch.output,
+              error: dispatch.error,
+            },
+          };
+        }
+
+        const limit = Math.min(Math.max(Number(args["limit"] ?? 5), 1), 50);
+        const dispatches = resolveLatestDispatches(limit);
+        return dispatches.map((d) => ({
+          id: d.id,
+          agent: d.agent,
+          task: d.task,
+          status: d.status,
+          triggeredBy: d.triggeredBy,
+          createdAt: d.createdAt,
+          completedAt: d.completedAt,
+          output: d.output,
+          error: d.error,
+        }));
       },
     },
   ];

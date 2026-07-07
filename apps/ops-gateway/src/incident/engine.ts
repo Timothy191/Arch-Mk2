@@ -22,7 +22,7 @@ export interface Incident {
   autoMitigated: boolean;
 }
 
-// Track incidents that have already triggered an agent dispatch
+// Track incidents that have already triggered a TUI agent dispatch
 const dispatchedIncidents = new Set<string>();
 
 // ── State ──────────────────────────────────────────────────
@@ -45,9 +45,7 @@ export function getCompletedIncidents(): Incident[] {
 
 // ── Event handler (called by Redis subscriber) ─────────────
 
-export async function handleTriggerEvent(
-  event: TriggerEvent,
-): Promise<void> {
+export async function handleTriggerEvent(event: TriggerEvent): Promise<void> {
   const incident: Incident = {
     id: event.id,
     severity: event.severity as Incident["severity"],
@@ -60,18 +58,17 @@ export async function handleTriggerEvent(
   };
 
   activeIncidents.set(incident.id, incident);
-  logger.warn(
-    `Active incident: ${incident.severity}/${incident.type}`,
-  );
+  logger.warn(`Active incident: ${incident.severity}/${incident.type}`);
 
   // Attempt auto-mitigation for known incident types
   await attemptAutoMitigation(incident);
 
   // Dispatch to TUI agent for critical and warning triggers
   if (
-    config.enableEveDispatch &&
+    config.enableAgentDispatch &&
     (incident.severity === "critical" || incident.severity === "warning")
   ) {
+    dispatchToAgent(incident).catch(() => {
       /* dispatch is fire-and-forget */
     });
   }
@@ -103,10 +100,7 @@ export async function periodicIncidentCheck(): Promise<void> {
   if (metrics) {
     const windowStart = Date.now() - config.incidentWindowMs;
     // Keep only recent errors
-    while (
-      errorTimestamps.length > 0 &&
-      errorTimestamps[0]! < windowStart
-    ) {
+    while (errorTimestamps.length > 0 && errorTimestamps[0]! < windowStart) {
       errorTimestamps.shift();
     }
 
@@ -164,9 +158,7 @@ export async function periodicIncidentCheck(): Promise<void> {
 
 // ── Auto-mitigation ────────────────────────────────────────
 
-async function attemptAutoMitigation(
-  incident: Incident,
-): Promise<void> {
+async function attemptAutoMitigation(incident: Incident): Promise<void> {
   // Auto-mitigation rules — safe, reversible actions only
   try {
     switch (incident.type) {
@@ -182,10 +174,7 @@ async function attemptAutoMitigation(
         // Attempt auto-repair on orphaned rows and stale data — per-table
         const audit = getLatestAudit();
         if (audit && audit.tablesByIssue) {
-          const repairPriority: string[] = [
-            "orphaned_rows",
-            "stale_data",
-          ];
+          const repairPriority: string[] = ["orphaned_rows", "stale_data"];
           for (const category of repairPriority) {
             const tables = audit.tablesByIssue[category];
             if (!tables || tables.length === 0) continue;
@@ -227,10 +216,10 @@ async function attemptAutoMitigation(
   }
 }
 
-// ── Agent dispatch helper ──────────────────────────────────
+// ── TUI agent dispatch helper ──────────────────────────────
 
 async function dispatchToAgent(incident: Incident): Promise<void> {
-  // Build context payload for the agent
+  // Build context payload for the TUI agent
   const health = getLatestHealth();
   const metrics = getLatestSnapshot();
   const audit = getLatestAudit();
@@ -332,7 +321,10 @@ async function createOrUpdateIncident(
   logger.warn(`Incident created: ${incident.severity}/${incident.type}`);
 
   // Dispatch to TUI agent for critical and warning incidents
-  if (config.enableEveDispatch && !dispatchedIncidents.has(incident.type)) {
+  if (
+    config.enableAgentDispatch !== false &&
+    !dispatchedIncidents.has(incident.type)
+  ) {
     dispatchedIncidents.add(incident.type);
     dispatchToAgent(incident).catch(() => {
       /* dispatch is fire-and-forget */
