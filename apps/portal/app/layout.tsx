@@ -12,6 +12,7 @@ import { CommandBar } from "@/components/CommandBar";
 import { RouteAnnouncer } from "@/components/RouteAnnouncer";
 import { AIAssistantWrapper } from "@/components/ai/AIAssistantWrapper";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { FocusModeToggle } from "@/components/FocusModeToggle";
 import { SystemTrayPill } from "@/components/system/SystemTray";
 import { WebVitalsReporter } from "@/components/WebVitalsReporter";
@@ -35,10 +36,6 @@ const HeaderWidgets = dynamic(
 import { SplitWindowLayout } from "@/components/system/SplitWindowLayout";
 import { RouteBackground } from "@/components/RouteBackground";
 import { ViewportBoundaries } from "@/components/system/ViewportBoundaries";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const anurati = localFont({
   src: "../assets/fonts/Anurati-Regular.otf",
@@ -150,7 +147,9 @@ export default function RootLayout({
         </a>
 
         {/* Announce SPA route changes to screen readers (WCAG 4.1.3) */}
-        <RouteAnnouncer />
+        <Suspense fallback={null}>
+          <RouteAnnouncer />
+        </Suspense>
 
         <ArchThemeProvider>
           <ClientProviders>
@@ -186,7 +185,9 @@ export default function RootLayout({
               </main>
 
               <CommandBar />
-              <ViewportBoundaries />
+              <Suspense fallback={null}>
+                <ViewportBoundaries />
+              </Suspense>
 
               {/* Footer landmark - if exists, otherwise contentinfo on body or create footer */}
               {/* We'll add a proper footer or ensure contentinfo is on appropriate element */}

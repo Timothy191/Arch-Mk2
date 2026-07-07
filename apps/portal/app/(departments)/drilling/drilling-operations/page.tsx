@@ -5,8 +5,6 @@ import { getDrillingOpsData } from "~/lib/data/drilling";
 import { Suspense } from "react";
 import { GlassSkeleton } from "@repo/ui/components/ui/glass-skeleton";
 
-export const instant = false;
-
 async function DrillingOperationsContent({ deptId }: { deptId: string }) {
   const { drills, ops, operators } = await getDrillingOpsData(deptId);
 
@@ -47,4 +45,3 @@ export default async function DrillingOperationsPage() {
     </div>
   );
 }
-

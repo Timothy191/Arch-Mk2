@@ -30,13 +30,7 @@ import {
 } from "lucide-react";
 import { FocusModeToggle } from "@/components/FocusModeToggle";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 const PORTAL_VERSION = process.env.PORTAL_VERSION ?? "2.4.1";
-
-// TODO: Cache Components adoption - restore dynamic = "force-dynamic" behavior
 
 async function getDashboardCounts(today: string, userId: string) {
   "use cache: private";

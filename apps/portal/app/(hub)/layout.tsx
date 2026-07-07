@@ -1,4 +1,4 @@
-import { cache } from "react";
+import { cache, Suspense } from "react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import {
   createServerSupabaseClient,
@@ -6,10 +6,6 @@ import {
 } from "@repo/supabase/server";
 import { createReadReplicaClient } from "@repo/supabase/read-replica";
 import { redirect } from "next/navigation";
-
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
 
 const getAccessibleDepartmentNames = cache(
   async function getAccessibleDepartmentNames(
@@ -60,7 +56,9 @@ export default async function HubLayout({
         </div>
 
         {/* Mobile bottom navigation (hidden on md+) */}
-        <BottomNav accessibleDepartments={accessibleDepartments} />
+        <Suspense fallback={null}>
+          <BottomNav accessibleDepartments={accessibleDepartments} />
+        </Suspense>
       </div>
     </div>
   );

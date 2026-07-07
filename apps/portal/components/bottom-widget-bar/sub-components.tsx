@@ -166,7 +166,7 @@ export function WheelItem({
 /**
  * Sub-menu ring dedicated to primary department navigation.
  */
-export function OperationsWheelItem({
+function OperationsWheelItem({
   onNavigate,
   color,
   icon: Icon,
@@ -227,7 +227,7 @@ export function OperationsWheelItem({
 /**
  * Sub-menu ring for system tools, settings, and external integrations (e.g., n8n).
  */
-export function ToolsWheelItem({
+function ToolsWheelItem({
   onNavigate,
   color,
   icon: Icon,

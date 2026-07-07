@@ -1,5 +1,4 @@
 import Form from "next/form";
-import Link from "next/link";
 import {
   Table,
   TableBody,
@@ -54,39 +53,6 @@ export function formatMonth(yearMonth: string): string {
     year: "numeric",
     month: "long",
   });
-}
-
-export function TelemetryHeader({ currentMonth }: { currentMonth: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <div>
-        <h2 className="text-2xl font-semibold text-[var(--text-heading)]">
-          Machine Telemetry
-        </h2>
-        <div className="flex items-center gap-2 mt-1">
-          <Calendar className="w-4 h-4 text-[var(--text-muted)]" />
-          <p className="text-sm text-[var(--text-muted)]">
-            Current Period:{" "}
-            <span className="font-medium text-[var(--accent-blue)]">
-              {formatMonth(currentMonth)}
-            </span>
-          </p>
-        </div>
-      </div>
-      <div className="flex gap-2">
-        <Link href="/drilling/drilling-operations">
-          <Button variant="outline" className="border-[var(--border-subtle)]">
-            <Activity className="w-4 h-4 mr-2" />
-            Live Operations
-          </Button>
-        </Link>
-        <Button className="bg-[var(--accent-blue)] hover:bg-[var(--accent-blue)]/90">
-          <Gauge className="w-4 h-4 mr-2" />
-          Export Data
-        </Button>
-      </div>
-    </div>
-  );
 }
 
 export function TelemetryKPICards({

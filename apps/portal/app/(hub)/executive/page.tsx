@@ -14,12 +14,6 @@ import { ExportButton } from "@/features/analytics/components/ExportButton";
 import { PDFDownloadButton } from "@/features/analytics/components/PDFDownloadButton";
 import { ProductionTrendChart } from "@/features/analytics/components/ProductionTrendChartWrapper";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
-// TODO: Cache Components adoption - restore dynamic = "force-dynamic" behavior
-
 export default async function ExecutiveDashboardPage() {
   const supabase = await createServerSupabaseClient();
   const {

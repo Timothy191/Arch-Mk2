@@ -104,3 +104,10 @@ node_modules
 .agentic-tools-mcp/repowise/*.pkl
 .agentic-tools-mcp/repowise/*.db
 .agentic-tools-mcp/sense/*.db
+
+# Repowise transient SQLite artifacts and lock files
+.agentic-tools-mcp/repowise/*.db-shm
+.agentic-tools-mcp/repowise/*.db-wal
+.agentic-tools-mcp/repowise/.update.lock
+*.db-shm
+*.db-wal

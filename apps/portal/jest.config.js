@@ -63,6 +63,7 @@ module.exports = {
     "^@repo/ui/AnimatedButton$":
       "<rootDir>/../../packages/ui/src/components/ui/animated-button.tsx",
     "^@repo/ui/(.*)$": "<rootDir>/../../packages/ui/src/$1",
+    "^server-only$": "<rootDir>/../../packages/utils/src/empty.ts",
   },
   collectCoverageFrom: [
     "lib/**/*.{ts,tsx}",

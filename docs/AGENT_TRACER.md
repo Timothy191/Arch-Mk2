@@ -2,6 +2,16 @@
 
 This file maintains a record of AI agent interventions, context hand-offs, and architectural breadcrumbs for this specific package/app.
 
+## [2026-07-07] Clean up Repowise transient artifacts
+
+- **Agent**: Claude Code
+- **Changes**:
+  - Updated `.gitignore` to ignore Repowise transient SQLite artifacts and lock files (`*.db-shm`, `*.db-wal`, `.agentic-tools-mcp/repowise/*.db-shm`, `.agentic-tools-mcp/repowise/*.db-wal`, `.agentic-tools-mcp/repowise/.update.lock`).
+  - Safely removed transient untracked files `acc.db-shm` and `acc.db-wal` while preserving persistent databases (`acc.db`, `.agentic-tools-mcp/repowise/wiki.db`).
+  - Restored per-session acc hook state files (`.agentic-tools-mcp/claude/hooks/state/acc-session.json`, `acc-turn-*.json`, `turn-baseline-*.txt`) to their committed state so they are not accidentally committed as transient runtime state.
+- **Context**: The Repowise post-checkout hook updates the codebase intelligence index and can leave SQLite WAL/SHM sidecar files and lock files in the working tree. These are ephemeral artifacts that should never be committed. Tracked Repowise index files (e.g., `.agentic-tools-mcp/claude/CLAUDE.md`, `checksums.json`, `repowise-workspace.yaml`, `state.json`) are legitimate generated outputs and were left as working changes.
+- **Next Agent Notes**: After running Repowise index updates or the acc hook, verify that only legitimate generated index files and source-code changes remain; remove any `*.db-shm`, `*.db-wal`, or `.update.lock` files. Do not hand-edit `.claude/CLAUDE.md`.
+
 ## [2026-07-03] Baseline repository hygiene
 
 - **Agent**: Claude Code

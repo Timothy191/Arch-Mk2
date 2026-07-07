@@ -15,10 +15,6 @@ import { Suspense } from "react";
 import { getBadgesForDepartment } from "~/lib/data/access-control";
 import { GlassSkeleton } from "@repo/ui/components/ui/glass-skeleton";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 interface BadgeWithRelations {
   id: string;
   qr_code: string;
@@ -31,8 +27,6 @@ interface BadgeWithRelations {
   fleet: { fleet_code: string; vehicle_type: string } | null;
   equipment: { equip_code: string; equipment_type: string } | null;
 }
-
-// TODO: Cache Components adoption - restore dynamic = "force-dynamic" behavior
 
 async function BadgesTable({ deptId }: { deptId: string }) {
   const badges = (await getBadgesForDepartment(

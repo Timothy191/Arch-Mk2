@@ -2,6 +2,16 @@
 
 This file maintains a record of AI agent interventions, context hand-offs, and architectural breadcrumbs for this specific package/app.
 
+## [2026-07-07] Knip cleanup
+
+- **Agent**: Claude Code
+- **Purpose**: Address `pnpm knip` findings for unused exports and unlisted dependencies.
+- **Changes Made**:
+  - Removed dead `TelemetryHeader` export from `app/(departments)/drilling/machine-telemetry/components/TelemetryComponents.tsx` and its now-unused `next/link` import.
+  - Demoted `OperationsWheelItem` and `ToolsWheelItem` in `components/bottom-widget-bar/sub-components.tsx` from exported to module-local functions (still used internally by `WheelItem`).
+  - Added `server-only` to `apps/portal/package.json` dependencies to satisfy the `server-only` imports in `lib/data/access-control.ts`, `drilling.ts`, and `operations.ts`.
+- **Next Agent Notes**: These components are private to their modules; if you need them elsewhere, re-export intentionally and document the API boundary.
+
 ## [2026-06-05] AMCA Foundation / Initialization
 
 - **Agent**: Antigravity
@@ -172,3 +182,28 @@ This file maintains a record of AI agent interventions, context hand-offs, and a
   - `packages/theme/src/css/variables.css` and `packages/theme/src/tailwind/preset.ts`: Removed static font stack overrides and removed `var(--font-anurati)` from default `font-sans` so `next/font` variables from `app/layout.tsx` are authoritative.
 - **Context**: The native GET forms caused full page reloads and missed Next.js shared-UI prefetching. The theme CSS was overriding `next/font`-injected `--font-sans`/`--font-mono` with static stacks, undermining self-hosting and CLS optimization. Mutation/client forms (login, data entry, chat) were intentionally left as native forms because they do not perform URL search-param navigation.
 - **Next Agent**: When adding new search-param filter forms, prefer `next/form` with `action=""`. When changing global fonts, ensure `next/font` variables are not overridden by static definitions in theme CSS.
+
+## [2026-07-07] Adopt Next.js 16 Cache Components across portal routes
+
+- **Agent**: Claude Code
+- **Purpose**: Remove the temporary `export const instant = false` opt-out from portal routes and align them with Next.js 16 Cache Components semantics.
+- **Changes Made**:
+  - Removed `export const instant = false` and its associated TODO comments from 62 route/test files under `apps/portal/app/`, including the priority set from the previous pass (history, reports, drilling, machine-telemetry, access-control, training, hub) and all remaining routes.
+  - Attempted to restore `export const dynamic = "force-dynamic"` on the 11 routes whose TODO indicated original dynamic intent, and `export const revalidate = 0` on `(departments)/[department]/excavator-activity/page.tsx`.
+  - Discovered that `export const dynamic` and `export const revalidate` segment configs are incompatible with `experimental.cacheComponents` in the installed Next.js 16.3.0-canary.78 build, so those legacy exports were removed again. Dynamic intent is now expressed automatically by the routes' use of dynamic data APIs (`cookies()`, `createServerSupabaseClient()`, `getDepartmentContext()`, `connection()`, etc.).
+  - Wrapped shared client components that use `usePathname()` in `<Suspense fallback={null}>` so the root and hub layouts can prerender:
+    - `app/layout.tsx`: `RouteAnnouncer` and `ViewportBoundaries`
+    - `app/(hub)/layout.tsx`: `BottomNav`
+  - Removed stale "Removed force-dynamic segment config to comply with cacheComponents" comment from `(auth)/login/page.tsx`.
+- **Context**: The repository enabled `experimental.cacheComponents` in `next.config.mjs` on 2026-07-06. The `instant = false` exports were a temporary opt-out. With the opt-out removed, the production build now classifies routes as Static (○), Partial Prerender (◐), or Dynamic (ƒ) based on the data APIs they use. No routes needed to be left untouched; all routes now build successfully under Cache Components.
+- **Next Agent Notes**: When adding new routes, avoid `export const instant = false`. Do not add `export const dynamic` or `export const revalidate` while `cacheComponents` is enabled — they are rejected at build time. Use dynamic data APIs or `await connection()` to opt a route into dynamic rendering, and wrap any client component that reads URL state (`usePathname`, `useSearchParams`) in `<Suspense>` to avoid blocking prerendering.
+
+## 2026-07-07 Fix portal env parsing for production warnings
+
+- **Agent**: Claude Code
+- **Purpose**: Fix failing `lib/env.test.ts` test "picks up custom env var values" where `env.NEXT_PUBLIC_SUPABASE_URL` returned `undefined` after setting a custom value.
+- **Root Cause**: The Zod schema uses `.superRefine()` to add production-only custom issues (e.g. "Production must not use the dummy anon key"). When `NODE_ENV=production` was set in the test, `safeParse` failed, and the old implementation returned `result.data ?? ({} as EnvVars)`, discarding all parsed values including the valid custom URL.
+- **Changes Made**:
+  - `apps/portal/lib/env.ts`: Split the schema into `baseEnvSchema` and `envSchema = baseEnvSchema.superRefine(...)`. On validation failure, after logging warnings and handling missing-required errors, parse the raw env again with `baseEnvSchema` so defaults and custom values are preserved.
+  - Added `// AGENT-TRACE` comment documenting the fallback behavior.
+- **Next Agent**: If you tighten production validation or add required fields, keep the fallback path in sync so that non-fatal warnings do not erase otherwise valid env values. Run `pnpm --filter portal test -- lib/env.test.ts` after any env schema changes.

@@ -3,10 +3,6 @@ import { BookOpen, Clock, Users, PlayCircle, Plus } from "lucide-react";
 import { SearchForm } from "../components/SearchForm";
 import { FilterTabs } from "../components/FilterTabs";
 
-// TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
-// See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
-export const instant = false;
-
 interface Course {
   id: number;
   title: string;
