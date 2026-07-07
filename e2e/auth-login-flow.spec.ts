@@ -16,7 +16,10 @@ test.describe("authenticated login flow", () => {
     // If login succeeds, we get redirected to hub (/)
     // If login fails (no Supabase in CI), we stay on /login
     try {
-      await expect(page).toHaveURL(/^(?!.*\/login).*$|^http:\/\/localhost:3000\/$/ , { timeout: 8000 });
+      await expect(page).toHaveURL(
+        /^(?!.*\/login).*$|^http:\/\/localhost:3000\/$/,
+        { timeout: 8000 },
+      );
       // Login succeeded — verify hub page shell rendered
       if (!page.url().includes("/login")) {
         await expect(page.locator("h1, h2").first()).toBeVisible();
@@ -72,24 +75,22 @@ test.describe("authenticated login flow", () => {
     try {
       await expect(page).not.toHaveURL(/\/login/, { timeout: 5000 });
     } catch {
-      await expect(page.locator("form[data-testid='login-form']")).toBeVisible();
+      await expect(
+        page.locator("form[data-testid='login-form']"),
+      ).toBeVisible();
     }
   });
 });
 
 test.describe("authenticated hub page rendering", () => {
-  test("hub page redirects to login when unauthenticated", async ({
-    page,
-  }) => {
+  test("hub page redirects to login when unauthenticated", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveURL(/.*\/login.*/);
     expect(page.url()).toContain("redirect=%2F");
     await expect(page.locator("form[data-testid='login-form']")).toBeVisible();
   });
 
-  test("hub page shows dashboard after successful auth", async ({
-    page,
-  }) => {
+  test("hub page shows dashboard after successful auth", async ({ page }) => {
     await page.goto("/login");
     await page.locator("input#email").fill("timothyoniel558@gmail.com");
     await page.locator("input#password").fill("Yugioh@123#");
@@ -105,13 +106,13 @@ test.describe("authenticated hub page rendering", () => {
 
       // Core Operational Modules section should be present
       await expect(
-        page.locator("text=Core Operational Modules").or(page.locator("text=Central Operations Portal"))
+        page
+          .locator("text=Core Operational Modules")
+          .or(page.locator("text=Central Operations Portal")),
       ).toBeVisible();
 
       // Dashboard counts should render
-      await expect(
-        page.locator('[class*="grid"]').first()
-      ).toBeVisible();
+      await expect(page.locator('[class*="grid"]').first()).toBeVisible();
     } catch {
       // CI without Supabase — acceptable
       await expect(page).toHaveURL(/.*\/login.*/);
@@ -129,9 +130,7 @@ test.describe("authenticated department page access", () => {
     await expect(page.locator("form[data-testid='login-form']")).toBeVisible();
   });
 
-  test("department page renders after successful auth", async ({
-    page,
-  }) => {
+  test("department page renders after successful auth", async ({ page }) => {
     await page.goto("/login");
     await page.locator("input#email").fill("timothyoniel558@gmail.com");
     await page.locator("input#password").fill("Yugioh@123#");
@@ -164,7 +163,11 @@ test.describe("authenticated department page access", () => {
       await expect(page).not.toHaveURL(/\/login/, { timeout: 8000 });
       // Authenticated — verify department page has Dashboard heading
       await page.goto("/drilling");
-      await expect(page.locator("text=Dashboard").or(page.locator("text=Control Room Dashboard"))).toBeVisible({ timeout: 10000 });
+      await expect(
+        page
+          .locator("text=Dashboard")
+          .or(page.locator("text=Control Room Dashboard")),
+      ).toBeVisible({ timeout: 10000 });
     } catch {
       // CI without Supabase — acceptable
       await expect(page).toHaveURL(/.*\/login.*/);

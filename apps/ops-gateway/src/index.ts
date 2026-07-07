@@ -12,6 +12,7 @@ import {
 } from "./incident/engine.js";
 import { Logger } from "./logger.js";
 import { getConfiguredEves } from "./dispatcher/eve-dispatcher.js";
+import { config } from "./config.js";
 
 const logger = new Logger("main");
 
@@ -47,18 +48,8 @@ async function main(): Promise<void> {
   const availableEves = getConfiguredEves().map(
     (e: any) => `${e.id}${e.autoApprove ? " (auto)" : ""}`,
   );
-      logger.error(
-        `Incident check failed: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    });
-  }, incidentCheckIntervalMs);
-
-  // 3b. Log available TUI agents
-  const availableAgents = getConfiguredAgents().map(
-    (a) => `${a.id}${a.autoApprove ? " (auto)" : ""}`,
-  );
-  if (availableAgents.length > 0) {
-    logger.info(`TUI agents available: ${availableAgents.join(", ")}`);
+  if (availableEves.length > 0) {
+    logger.info(`TUI agents available: ${availableEves.join(", ")}`);
   } else {
     logger.warn("No TUI agents configured — agent dispatch disabled");
   }

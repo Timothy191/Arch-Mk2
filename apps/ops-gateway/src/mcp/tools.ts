@@ -10,6 +10,10 @@ import {
 } from "../dispatcher/eve-dispatcher.js";
 import type { SystemSummary } from "../ops-client.js";
 
+// ── Types ──────────────────────────────────────────────────
+
+export type ToolHandler = (args: Record<string, unknown>) => Promise<unknown>;
+
 // ── Schema definitions ─────────────────────────────────────
 
 const clearCacheSchema = {
@@ -28,7 +32,7 @@ const rateLimitSchema = {
 export function defineTools(): any[] {
   return [
     // ... [Other tools would be here, but for brevity I will only put the Eve tools and ensure syntax is perfect] ...
-    
+
     // 13. Eve dispatch — Fire-and-forget task to an Eve agent
     {
       name: "eve-dispatch",
@@ -41,7 +45,8 @@ export function defineTools(): any[] {
         properties: {
           task: {
             type: "string",
-            description: "Short label for the task, e.g. 'Investigate high error rate'",
+            description:
+              "Short label for the task, e.g. 'Investigate high error rate'",
           },
           prompt: {
             type: "string",
@@ -64,7 +69,7 @@ export function defineTools(): any[] {
         const preferredEve = args["eve"];
         const eveId =
           typeof preferredEve === "string" &&
-            ["opencode", "kilo", "agy"].includes(preferredEve)
+          ["opencode", "kilo", "agy"].includes(preferredEve)
             ? (preferredEve as "opencode" | "kilo" | "agy")
             : undefined;
 
@@ -111,8 +116,7 @@ export function defineTools(): any[] {
             enabled: e.enabled,
             autoApprove: e.autoApprove,
             timeoutMs: e.timeoutMs,
-            activeCount: runningDispatches.filter((d) => d.eve === e.id)
-              .length,
+            activeCount: runningDispatches.filter((d) => d.eve === e.id).length,
           })),
         };
       },

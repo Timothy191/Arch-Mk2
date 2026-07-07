@@ -33,6 +33,9 @@ const completedIncidents: Incident[] = [];
 // Rolling window for 5xx counting
 const errorTimestamps: number[] = [];
 
+// Counter for unique incident IDs
+let incidentCounter = 0;
+
 // ── Public API ─────────────────────────────────────────────
 
 export function getActiveIncidents(): Incident[] {
@@ -285,7 +288,7 @@ async function dispatchToAgent(incident: Incident): Promise<void> {
       triggerRef: incident.id,
     });
     logger.info(
-      `Dispatched to ${dispatch.agent} for incident ${incident.type} (${dispatch.id})`,
+      `Dispatched to ${dispatch.eve} for incident ${incident.type} (${dispatch.id})`,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
@@ -295,11 +298,6 @@ async function dispatchToAgent(incident: Incident): Promise<void> {
 
 // ── Helpers ────────────────────────────────────────────────
 
-      triggerRef: incident.id,
-    });
-    logger.info(
-      `Dispatched to ${dispatch.eve} for incident ${incident.type} (${dispatch.id})`,
-    );
 const knownIncidents = new Map<string, string>(); // type -> id
 
 async function createOrUpdateIncident(
