@@ -111,3 +111,7 @@ spec.yaml.aistack-backup-*
 .agentic-tools-mcp/repowise/.update.lock
 *.db-shm
 *.db-wal
+# Operational state databases (Claude agent-tracer pipeline)
+acc.db
+apps/**/acc.db
+
