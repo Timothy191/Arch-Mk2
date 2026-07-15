@@ -106,6 +106,41 @@ export async function revalidateRSC(tags: string[]) {
   return { success: true };
 }
 
+export async function saveDailyLog(
+  departmentId: string,
+  _prevState: unknown,
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const shift = formData.get("shift") as string;
+  const notes = formData.get("notes") as string;
+
+  try {
+    const token = await getAccessToken(supabase);
+    await postApi("/api/daily-logs", token, {
+      departmentId,
+      shift,
+      notes,
+      date: new Date().toISOString().split("T")[0],
+    });
+    revalidateTag("daily-logs", "max");
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Failed to save daily log",
+    };
+  }
+}
+
 export async function generateMonthlyReport(
   reportData: any,
   departmentId?: string,

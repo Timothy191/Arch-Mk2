@@ -35,7 +35,6 @@ const nextConfig = {
     "@opentelemetry/semantic-conventions",
     "@opentelemetry/otlp-transformer",
     "@opentelemetry/api",
-    "@arch/rust-bindings",
     "@arch/rust-bindings-native",
   ],
   images: {

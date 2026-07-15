@@ -2,28 +2,23 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  Inject,
 } from "@nestjs/common";
-import { SUPABASE_CLIENT } from "../../supabase/supabase.constants";
 import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import * as jwt from "jsonwebtoken";
 import type { FastifyRequest } from "fastify";
 
 /**
- * Global auth guard that validates Supabase session tokens.
+ * Global auth guard that validates JWT tokens.
  *
  * Reads the `Authorization: Bearer <token>` header or
- * `sb-access-token` cookie and validates the user session.
+ * `auth-token` cookie and validates the JWT.
  *
  * Routes that should skip auth (e.g., /auth/login, /health)
  * use the @Public() decorator.
  */
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
-  constructor(
-    @Inject(SUPABASE_CLIENT)
-    private readonly supabase: SupabaseClient,
-  ) {}
+  private readonly jwtSecret = process.env.JWT_SECRET || "fallback-secret";
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
@@ -41,15 +36,24 @@ export class SupabaseAuthGuard implements CanActivate {
     if (!token) return false;
 
     try {
-      const {
-        data: { user },
-        error,
-      } = await this.supabase.auth.getUser(token);
+      const payload = jwt.verify(token, this.jwtSecret) as {
+        sub: string;
+        email: string;
+        role: string | null;
+        departmentId: string | null;
+      };
 
-      if (error || !user) return false;
+      if (!payload.sub) return false;
 
       // Attach user to request for @CurrentUser() decorator
-      (request as any).user = user;
+      (request as any).user = {
+        id: payload.sub,
+        email: payload.email,
+        user_metadata: {
+          role: payload.role,
+        },
+      };
+
       return true;
     } catch {
       return false;
@@ -60,7 +64,7 @@ export class SupabaseAuthGuard implements CanActivate {
     const cookies = request.headers.cookie;
     if (!cookies) return null;
 
-    const match = cookies.match(/sb-access-token=([^;]+)/);
+    const match = cookies.match(/auth-token=([^;]+)/);
     return match?.[1] ?? null;
   }
 }

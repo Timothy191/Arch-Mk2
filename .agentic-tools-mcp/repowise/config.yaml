@@ -1,4 +1,0 @@
-distill:
-  commands:
-    enabled: true
-commit_limit: 200

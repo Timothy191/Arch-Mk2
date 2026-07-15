@@ -2,7 +2,7 @@ import {
   render,
   screen,
   waitFor,
-  fireevent,
+  fireEvent,
   act,
 } from "@testing-library/react";
 import { SafetyIncidentForm } from "./SafetyIncidentForm";
@@ -39,13 +39,13 @@ describe("SafetyIncidentForm", () => {
   ];
 
   function fillRequiredFields() {
-    fireevent.change(screen.getByLabelText(/Type/i), {
+    fireEvent.change(screen.getByLabelText(/Type/i), {
       target: { value: "near-miss" },
     });
-    fireevent.change(screen.getByLabelText(/Severity Level/i), {
+    fireEvent.change(screen.getByLabelText(/Severity Level/i), {
       target: { value: "sev-1" },
     });
-    fireevent.change(screen.getByLabelText(/Description/i), {
+    fireEvent.change(screen.getByLabelText(/Description/i), {
       target: { value: "Worker slipped on wet floor" },
     });
   }
@@ -82,7 +82,7 @@ describe("SafetyIncidentForm", () => {
       />,
     );
 
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Select incident type")).toBeInTheDocument();
@@ -128,11 +128,11 @@ describe("SafetyIncidentForm", () => {
     );
 
     fillRequiredFields();
-    fireevent.change(screen.getByLabelText(/Location/i), {
+    fireEvent.change(screen.getByLabelText(/Location/i), {
       target: { value: "Main Pit" },
     });
 
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     await waitFor(() => {
       expect(mockInsert).toHaveBeenCalledTimes(1);
@@ -191,7 +191,7 @@ describe("SafetyIncidentForm", () => {
     );
 
     fillRequiredFields();
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     await waitFor(() => {
       expect(
@@ -242,7 +242,7 @@ describe("SafetyIncidentForm", () => {
     );
 
     fillRequiredFields();
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     // Check for loading state - button should show "Saving..." and be disabled
     await waitFor(() => {
@@ -269,19 +269,19 @@ describe("SafetyIncidentForm", () => {
     // Fill required fields first so injured parties validation is reached
     fillRequiredFields();
 
-    fireevent.change(screen.getByLabelText(/Injured Parties/i), {
+    fireEvent.change(screen.getByLabelText(/Injured Parties/i), {
       target: { value: "-1" },
     });
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Invalid number")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText(/Injured Parties/i), {
+    fireEvent.change(screen.getByLabelText(/Injured Parties/i), {
       target: { value: "101" },
     });
-    fireevent.click(screen.getByRole("button", { name: /Log Incident/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Log Incident/i }));
 
     await waitFor(() => {
       expect(screen.getByText("Invalid number")).toBeInTheDocument();

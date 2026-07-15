@@ -82,7 +82,7 @@ export function WebhookManager() {
     }
   };
 
-  const handleSubmit = async (e: React.Formevent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.url || formData.event_types.length === 0) {

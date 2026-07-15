@@ -1,16 +1,14 @@
 import {
   Injectable,
-  Inject,
   Logger,
   UnauthorizedException,
   ForbiddenException,
   BadRequestException,
   NotFoundException,
 } from "@nestjs/common";
-import { SUPABASE_CLIENT } from "../supabase/supabase.constants";
 import { ConfigService } from "@nestjs/config";
 import { scannerBadgeSchema } from "../common/schemas";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { db } from "@repo/database";
 
 @Injectable()
 export class AccessControlService {
@@ -18,10 +16,7 @@ export class AccessControlService {
   private readonly allowedScannerSources: string[];
   private readonly expectedToken: string | undefined;
 
-  constructor(
-    @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.expectedToken = this.configService.get("SCANNER_API_KEY");
     this.allowedScannerSources = (
       this.configService.get("ALLOWED_SCANNER_SOURCES") ??
@@ -61,26 +56,23 @@ export class AccessControlService {
     }
 
     // 1. Find the Badge and check if it's active
-    const { data: badge, error: badgeError } = await this.supabase
-      .from("badges")
-      .select("id, is_active, entity_type, personnel_id, visitor_id")
-      .eq("qr_code", code)
-      .single();
+    const { data: badge } = await db
+      .selectFrom("badges")
+      .select(["id", "is_active", "entity_type", "personnel_id", "visitor_id"])
+      .where("qr_code", "=", code)
+      .execute();
 
-    if (badgeError || !badge) {
-      await this.logAccess(
-        null,
-        "UNKNOWN",
-        "DENIED - Unrecognized Badge",
-        source,
-      );
+    if (!badge || badge.length === 0) {
+      await this.logAccess(null, "UNKNOWN", "DENIED - Unrecognized Badge", source);
       throw new NotFoundException("Unrecognized Badge");
     }
 
-    if (!badge.is_active) {
+    const badgeRecord = badge[0];
+
+    if (!badgeRecord.is_active) {
       await this.logAccess(
-        badge.id,
-        badge.entity_type,
+        badgeRecord.id,
+        badgeRecord.entity_type,
         "DENIED - Badge Revoked",
         source,
       );
@@ -92,38 +84,40 @@ export class AccessControlService {
     let isAuthorized = true;
     let denialReason: string | null = null;
 
-    if (badge.entity_type === "personnel" && badge.personnel_id) {
-      const { data: person } = await this.supabase
-        .from("personnel")
-        .select("first_name, surname, status")
-        .eq("id", badge.personnel_id)
-        .single();
-      if (person) {
-        entityName = `${person.first_name} ${person.surname}`;
-        if (person.status !== "Active") {
+    if (badgeRecord.entity_type === "personnel" && badgeRecord.personnel_id) {
+      const { data: person } = await db
+        .selectFrom("personnel")
+        .select(["first_name", "surname", "status"])
+        .where("id", "=", badgeRecord.personnel_id)
+        .execute();
+
+      if (person && person.length > 0) {
+        entityName = `${person[0].first_name} ${person[0].surname}`;
+        if (person[0].status !== "Active") {
           isAuthorized = false;
-          denialReason = `DENIED - Personnel Status: ${person.status}`;
+          denialReason = `DENIED - Personnel Status: ${person[0].status}`;
         }
       }
-    } else if (badge.entity_type === "visitor" && badge.visitor_id) {
-      const { data: visitor } = await this.supabase
-        .from("visitors")
-        .select("name, status")
-        .eq("id", badge.visitor_id)
-        .single();
-      if (visitor) {
-        entityName = visitor.name;
-        if (visitor.status !== "Checked In") {
+    } else if (badgeRecord.entity_type === "visitor" && badgeRecord.visitor_id) {
+      const { data: visitor } = await db
+        .selectFrom("visitors")
+        .select(["name", "status"])
+        .where("id", "=", badgeRecord.visitor_id)
+        .execute();
+
+      if (visitor && visitor.length > 0) {
+        entityName = visitor[0].name;
+        if (visitor[0].status !== "Checked In") {
           isAuthorized = false;
-          denialReason = `DENIED - Visitor Status: ${visitor.status}`;
+          denialReason = `DENIED - Visitor Status: ${visitor[0].status}`;
         }
       }
     }
 
     // 3. Log the Access event
     await this.logAccess(
-      badge.id,
-      badge.entity_type,
+      badgeRecord.id,
+      badgeRecord.entity_type,
       isAuthorized ? null : denialReason,
       source,
       isAuthorized,
@@ -143,16 +137,17 @@ export class AccessControlService {
     gateLocation: string,
     accessGranted = false,
   ) {
-    const { error } = await this.supabase.from("access_logs").insert([
-      {
+    const { error } = await db
+      .insertInto("access_logs")
+      .values({
         badge_id: badgeId,
         access_type: entityType,
         direction: "IN",
         gate_location: gateLocation,
         access_granted: accessGranted,
         denial_reason: denialReason,
-      },
-    ]);
+      })
+      .execute();
 
     if (error) {
       this.logger.error("access_log_write_failed", error.message);

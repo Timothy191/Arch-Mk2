@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireevent } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { LoginForm } from "./LoginForm";
 
 jest.mock("next/navigation", () => ({
@@ -38,7 +38,7 @@ jest.mock("@repo/ui/AnimatedButton", () => ({
     disabled?: boolean;
     className?: string;
     type?: "button" | "submit" | "reset";
-    onClick?: React.MouseeventHandler<HTMLButtonElement>;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
   }) => (
     <button
       type={type}
@@ -107,13 +107,13 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+    fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
       target: { value: "PC-12345" },
     });
-    fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+    fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
       target: { value: "testpass" },
     });
-    fireevent.submit(screen.getByTestId("login-form"));
+    fireEvent.submit(screen.getByTestId("login-form"));
 
     await waitFor(() => {
       expect(loginAction).toHaveBeenCalledWith({
@@ -136,13 +136,13 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+    fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
       target: { value: "PC-12345" },
     });
-    fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+    fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
       target: { value: "wrongpass" },
     });
-    fireevent.submit(screen.getByTestId("login-form"));
+    fireEvent.submit(screen.getByTestId("login-form"));
 
     await waitFor(() => {
       expect(screen.getByText(/Invalid credentials/i)).toBeInTheDocument();
@@ -156,13 +156,13 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+    fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
       target: { value: "PC-12345" },
     });
-    fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+    fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
       target: { value: "testpass" },
     });
-    fireevent.submit(screen.getByTestId("login-form"));
+    fireEvent.submit(screen.getByTestId("login-form"));
 
     await waitFor(() => {
       expect(
@@ -187,13 +187,13 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+    fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
       target: { value: "PC-12345" },
     });
-    fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+    fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
       target: { value: "testpass" },
     });
-    fireevent.submit(screen.getByTestId("login-form"));
+    fireEvent.submit(screen.getByTestId("login-form"));
 
     // Button should show loading text and be disabled while loading
     await waitFor(() => {
@@ -225,13 +225,13 @@ describe("LoginForm", () => {
 
     render(<LoginForm />);
 
-    fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+    fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
       target: { value: "PC-12345" },
     });
-    fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+    fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
       target: { value: "testpass" },
     });
-    fireevent.submit(screen.getByTestId("login-form"));
+    fireEvent.submit(screen.getByTestId("login-form"));
 
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith("/dashboard");
@@ -246,12 +246,12 @@ describe("LoginForm", () => {
     expect(passwordInput).toHaveAttribute("type", "password");
 
     // Click toggle button to show password
-    fireevent.click(toggleButton);
+    fireEvent.click(toggleButton);
     expect(passwordInput).toHaveAttribute("type", "text");
     expect(toggleButton).toHaveAttribute("aria-label", "Hide password");
 
     // Click toggle button to hide password again
-    fireevent.click(toggleButton);
+    fireEvent.click(toggleButton);
     expect(passwordInput).toHaveAttribute("type", "password");
     expect(toggleButton).toHaveAttribute("aria-label", "Show password");
   });
@@ -261,28 +261,28 @@ describe("LoginForm", () => {
     const passwordInput = screen.getByPlaceholderText("Enter your password");
 
     // Press key with CapsLock active
-    const keyDownevent = new Keyboardevent("keydown", {
+    const keyDownEvent = new KeyboardEvent("keydown", {
       key: "a",
       bubbles: true,
       cancelable: true,
     });
-    Object.defineProperty(keyDownevent, "getModifierState", {
+    Object.defineProperty(keyDownEvent, "getModifierState", {
       value: (key: string) => key === "CapsLock",
     });
-    fireevent(passwordInput, keyDownevent);
+    fireEvent(passwordInput, keyDownEvent);
 
     expect(screen.getByText("Caps Lock is on")).toBeInTheDocument();
 
     // Release key with CapsLock disabled
-    const keyUpevent = new Keyboardevent("keyup", {
+    const keyUpEvent = new KeyboardEvent("keyup", {
       key: "a",
       bubbles: true,
       cancelable: true,
     });
-    Object.defineProperty(keyUpevent, "getModifierState", {
+    Object.defineProperty(keyUpEvent, "getModifierState", {
       value: (_key: string) => false,
     });
-    fireevent(passwordInput, keyUpevent);
+    fireEvent(passwordInput, keyUpEvent);
 
     expect(screen.queryByText("Caps Lock is on")).not.toBeInTheDocument();
   });
@@ -302,13 +302,13 @@ describe("LoginForm", () => {
 
       const { unmount } = render(<LoginForm />);
 
-      fireevent.change(screen.getByPlaceholderText("Employee ID or email"), {
+      fireEvent.change(screen.getByPlaceholderText("Employee ID or email"), {
         target: { value: "PC-12345" },
       });
-      fireevent.change(screen.getByPlaceholderText("Enter your password"), {
+      fireEvent.change(screen.getByPlaceholderText("Enter your password"), {
         target: { value: "testpass" },
       });
-      fireevent.submit(screen.getByTestId("login-form"));
+      fireEvent.submit(screen.getByTestId("login-form"));
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith(expectedTarget);

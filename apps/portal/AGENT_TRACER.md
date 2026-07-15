@@ -2,6 +2,29 @@
 
 This file maintains a record of AI agent interventions, context hand-offs, and architectural breadcrumbs for this specific package/app.
 
+## [2026-07-14] Document repository context and create deploy-server.sh
+
+- **Agent**: Claude Code
+- **Purpose**: Analyze the detached `new/` portal directory, create `CLAUDE.md` guidance for future agents, and add a `deploy-server.sh` script that is workspace-aware.
+- **Changes Made**:
+  - Wrote `/home/arch/Applications/new/CLAUDE.md` with Next.js agent rules, repository context, common commands, architecture overview, testing/build notes, and the mandatory tracing rule.
+  - Created `/home/arch/Applications/new/deploy-server.sh` that detects the pnpm monorepo workspace before installing/building/starting the portal.
+- **Next Agent Notes**: This directory is a detached copy of `arch-systems/apps/portal`. Commands that need `@repo/*` packages or the lockfile only work when the directory is placed inside the monorepo workspace. Do not treat it as a standalone installable package without first resolving the workspace placement.
+
+## [2026-07-14] Reorganize department routes per full-stack Next.js / monorepo guidelines
+
+- **Agent**: Claude Code
+- **Purpose**: Group every department’s pages under its own `app/(departments)/<dept>/` folder, eliminate the ambiguous `[department]` dynamic catch-all, and resolve resulting route conflicts.
+- **Changes Made**:
+  - Moved shared department page implementations from `app/(departments)/[department]/` to `features/departments/pages/` (route-agnostic feature modules).
+  - Moved `app/(departments)/[department]/layout.tsx` to `features/departments/layout.tsx` and `page.tsx` to `features/departments/dashboard.tsx`.
+  - Added thin `page.tsx` / `layout.tsx` wrappers under each static department folder that import from the feature layer and pass `params={Promise.resolve({ department: "<dept>" })}`.
+  - Created missing department folders and wrappers for `control-room`, `production`, `safety`, and `satellite-monitoring`.
+  - Kept existing department-specific pages (`drilling/reports`, `drilling/drilling-operations`, `drilling/machine-telemetry`, `engineering/tire-management`, `access-control/*`, `training/*`).
+  - Removed the now-empty `app/(departments)/[department]/` dynamic segment.
+  - Fixed the broken `/safety/incidents` tab link in `lib/departments.ts` to `/safety/daily-log`.
+- **Next Agent Notes**: When adding a new shared department page, add the implementation under `features/departments/pages/` and create a thin wrapper in each department that exposes it. Avoid reintroducing a `[department]` dynamic segment at the same level as static department folders — Next.js treats matching static/dynamic URLs as a conflict.
+
 ## [2026-07-07] Knip cleanup
 
 - **Agent**: Claude Code

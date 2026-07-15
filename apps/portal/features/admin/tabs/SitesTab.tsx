@@ -325,7 +325,7 @@ function SiteForm({
   const [siteCode, setSiteCode] = useState(site?.site_code || "");
   const [active, setActive] = useState(site?.active ?? true);
 
-  const handleSubmit = (e: React.Formevent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({ name, site_code: siteCode, active });
   };

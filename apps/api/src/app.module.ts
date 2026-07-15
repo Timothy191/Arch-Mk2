@@ -1,10 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ThrottlerModule } from "@nestjs/throttler";
-import { SupabaseModule } from "./supabase/supabase.module";
 import { RedisModule } from "./redis/redis.module";
 import { AuthModule } from "./auth/auth.module";
-import { HealthModule } from "./health/health.module";
 import { WeatherModule } from "./weather/weather.module";
 import { SecurityModule } from "./security/security.module";
 import { ToolsModule } from "./tools/tools.module";
@@ -39,12 +37,8 @@ import { OpsModule } from "./ops/ops.module";
     ]),
 
     // Infrastructure modules
-    SupabaseModule,
     RedisModule,
-
-    // Feature modules
     AuthModule,
-    HealthModule,
     WeatherModule,
     SecurityModule,
     ToolsModule,

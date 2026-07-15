@@ -1,28 +1,26 @@
 import {
   Injectable,
-  Inject,
   Logger,
   NotFoundException,
   ForbiddenException,
   BadRequestException,
 } from "@nestjs/common";
-import { SUPABASE_CLIENT } from "../supabase/supabase.constants";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { db } from "@repo/database";
 import { createWebhookSchema, updateWebhookSchema } from "../common/schemas";
 
 @Injectable()
 export class WebhooksService {
   private readonly logger = new Logger(WebhooksService.name);
 
-  constructor(
-    @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
-  ) {}
+  constructor() {
+    // No Supabase client - we use db directly
+  }
 
   async getEmployee(userId: string) {
-    const { data: employee } = await this.supabase
-      .from("employees")
-      .select("department_id, role, accessible_departments, id")
-      .eq("auth_id", userId)
+    const employee = await db
+      .selectFrom("employees")
+      .select(["department_id", "role", "accessible_departments", "id"])
+      .where("auth_id", "=", userId)
       .single();
 
     if (!employee) {
@@ -36,27 +34,26 @@ export class WebhooksService {
     role: string;
     accessible_departments: string[] | null;
   }) {
-    let query = this.supabase
-      .from("webhook_endpoints")
-      .select("*")
-      .is("deleted_at", null);
+    let query = db
+      .selectFrom("webhook_endpoints")
+      .select(["*"])
+      .where("deleted_at", "=", null);
 
     if (employee.role !== "admin") {
       const depts = employee.accessible_departments || [];
       if (depts.length > 0) {
-        query = query.or(
-          `department_id.eq.${employee.department_id},department_id.in.(${depts.join(",")})`,
+        query = query.where((qb) =>
+          qb.or([
+            qb.eq("department_id", employee.department_id),
+            qb.in("department_id", depts),
+          ]),
         );
       } else {
         query = query.eq("department_id", employee.department_id);
       }
     }
 
-    const { data: webhooks, error } = await query;
-    if (error) {
-      this.logger.error("Database query failed", error.message);
-      throw new Error("Database query failed");
-    }
+    const webhooks = await query.execute();
     return { webhooks };
   }
 
@@ -68,7 +65,6 @@ export class WebhooksService {
 
     const { url, description, event_types, department_id } = parsed.data;
 
-    // Non-admins can only create webhooks for their department
     if (employee.role !== "admin") {
       const targetDept = department_id || employee.department_id;
       if (
@@ -79,22 +75,19 @@ export class WebhooksService {
       }
     }
 
-    const { data: webhook, error } = await this.supabase
-      .from("webhook_endpoints")
-      .insert({
-        url,
-        description,
-        event_types,
-        department_id: department_id || employee.department_id,
-        active: true,
-      })
-      .select()
-      .single();
+    const newWebhook = {
+      url,
+      description,
+      event_types,
+      department_id: department_id || employee.department_id,
+      active: true,
+    };
 
-    if (error) {
-      this.logger.error("Failed to create webhook", error.message);
-      throw new Error("Failed to create webhook");
-    }
+    const webhook = await db
+      .insertInto("webhook_endpoints")
+      .set(newWebhook)
+      .returningAll()
+      .executeTakeFirst();
 
     return { webhook };
   }
@@ -107,12 +100,11 @@ export class WebhooksService {
 
     const { url, description, event_types, active } = parsed.data;
 
-    // Check ownership
-    const { data: existingWebhook } = await this.supabase
-      .from("webhook_endpoints")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const existingWebhook = await db
+      .selectFrom("webhook_endpoints")
+      .select(["*"])
+      .where("id", "=", id)
+      .executeTakeFirst();
 
     if (!existingWebhook) {
       throw new NotFoundException("Webhook not found");
@@ -129,34 +121,37 @@ export class WebhooksService {
       }
     }
 
-    const { data: webhook, error } = await this.supabase
-      .from("webhook_endpoints")
-      .update({
-        ...(url !== undefined && { url }),
-        ...(description !== undefined && { description }),
-        ...(event_types !== undefined && { event_types }),
-        ...(active !== undefined && { active }),
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
+    const updateData: Record<string, any> = {};
 
-    if (error) {
-      this.logger.error("Failed to update webhook", error.message);
-      throw new Error("Failed to update webhook");
+    if (url !== undefined) {
+      updateData.url = url;
+    }
+    if (description !== undefined) {
+      updateData.description = description;
+    }
+    if (event_types !== undefined) {
+      updateData.event_types = event_types;
+    }
+    if (active !== undefined) {
+      updateData.active = active;
     }
 
-    return { webhook };
+    const updatedWebhook = await db
+      .updateTable("webhook_endpoints")
+      .set(updateData)
+      .where("id", "=", id)
+      .returningAll()
+      .executeTakeFirst();
+
+    return { webhook: updatedWebhook };
   }
 
   async deleteWebhook(id: string, employee: any) {
-    // Check ownership
-    const { data: existingWebhook } = await this.supabase
-      .from("webhook_endpoints")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const existingWebhook = await db
+      .selectFrom("webhook_endpoints")
+      .select(["*"])
+      .where("id", "=", id)
+      .executeTakeFirst();
 
     if (!existingWebhook) {
       throw new NotFoundException("Webhook not found");
@@ -173,27 +168,21 @@ export class WebhooksService {
       }
     }
 
-    // Soft delete
-    const { error } = await this.supabase
-      .from("webhook_endpoints")
-      .update({ deleted_at: new Date().toISOString() })
-      .eq("id", id);
-
-    if (error) {
-      this.logger.error("Failed to delete webhook", error.message);
-      throw new Error("Failed to delete webhook");
-    }
+    await db
+      .updateTable("webhook_endpoints")
+      .set({ deleted_at: new Date().toISOString() })
+      .where("id", "=", id)
+      .executeTakeFirst();
 
     return { success: true };
   }
 
   async getLogs(id: string, employee: any) {
-    // Check ownership
-    const { data: existingWebhook } = await this.supabase
-      .from("webhook_endpoints")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const existingWebhook = await db
+      .selectFrom("webhook_endpoints")
+      .select(["*"])
+      .where("id", "=", id)
+      .executeTakeFirst();
 
     if (!existingWebhook) {
       throw new NotFoundException("Webhook not found");
@@ -210,17 +199,13 @@ export class WebhooksService {
       }
     }
 
-    const { data: logs, error } = await this.supabase
-      .from("webhook_delivery_logs")
-      .select("*")
-      .eq("webhook_endpoint_id", id)
-      .order("created_at", { ascending: false })
-      .limit(50);
-
-    if (error) {
-      this.logger.error("Database query failed", error.message);
-      throw new Error("Database query failed");
-    }
+    const logs = await db
+      .selectFrom("webhook_delivery_logs")
+      .select(["*"])
+      .where("webhook_endpoint_id", "=", id)
+      .orderBy("created_at", "desc")
+      .limit(50)
+      .execute();
 
     return { logs };
   }

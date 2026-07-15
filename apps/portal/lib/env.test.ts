@@ -47,6 +47,9 @@ describe("env validation", () => {
     "PORTAL_VERSION",
   ] as const;
 
+  const TEST_SUPABASE_URL = "https://example.supabase.co";
+  const TEST_SUPABASE_ANON_KEY = "test-anon-key";
+
   const saved: Record<string, string | undefined> = {};
 
   beforeAll(() => {
@@ -63,15 +66,33 @@ describe("env validation", () => {
     resetEnv();
   });
 
-  it("provides defaults when no env vars are set", () => {
+  it("throws when public Supabase credentials are missing", () => {
     for (const key of ENV_KEYS) {
       setEnvVar(key, undefined);
     }
     // Clear the DISABLE_RATE_LIMIT that setupTests.ts sets
     setEnvVar("DISABLE_RATE_LIMIT", undefined);
+
+    resetEnv();
+    expect(() => {
+      void env.PORT;
+    }).toThrow(/Invalid environment variables/i);
+  });
+
+  it("provides defaults when non-supabase env vars are missing", () => {
+    for (const key of ENV_KEYS) {
+      setEnvVar(key, undefined);
+    }
+
+    // Required public Supabase vars for validation
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
+
+    // Clear the DISABLE_RATE_LIMIT that setupTests.ts sets
+    setEnvVar("DISABLE_RATE_LIMIT", undefined);
+
     resetEnv();
 
-    expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe("http://127.0.0.1:54321");
     expect(env.OLLAMA_URL).toBe("http://localhost:11434");
     expect(env.OLLAMA_DEFAULT_MODEL).toBe("gemma4:latest");
     expect(env.PORT).toBe(3000);
@@ -83,19 +104,22 @@ describe("env validation", () => {
   });
 
   it("picks up custom env var values", () => {
-    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
     setEnvVar("PORT", "8080");
     setEnvVar("NODE_ENV", "production");
     setEnvVar("OTEL_SERVICE_NAME", "my-custom-service");
     resetEnv();
 
-    expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe("https://example.supabase.co");
+    expect(env.NEXT_PUBLIC_SUPABASE_URL).toBe(TEST_SUPABASE_URL);
     expect(env.PORT).toBe(8080);
     expect(env.NODE_ENV).toBe("production");
     expect(env.OTEL_SERVICE_NAME).toBe("my-custom-service");
   });
 
   it("coerces PORT to a number", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
     setEnvVar("PORT", "4000");
     resetEnv();
 
@@ -104,6 +128,8 @@ describe("env validation", () => {
   });
 
   it("transforms feature flag strings to booleans", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
     setEnvVar("ENABLE_LOAD_ADAPTIVE_TEST", "true");
     setEnvVar("DISABLE_RATE_LIMIT", "true");
     setEnvVar("CI", "true");
@@ -115,6 +141,8 @@ describe("env validation", () => {
   });
 
   it("treats non-true feature flags as false", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
     setEnvVar("ENABLE_LOAD_ADAPTIVE_TEST", "0");
     setEnvVar("DISABLE_RATE_LIMIT", "FALSE");
     setEnvVar("CI", undefined);
@@ -126,6 +154,9 @@ describe("env validation", () => {
   });
 
   it("resetEnv clears cached values so new env vars take effect", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
+
     setEnvVar("PORT", undefined);
     resetEnv();
     expect(env.PORT).toBe(3000);
@@ -137,6 +168,8 @@ describe("env validation", () => {
   });
 
   it("getEnvErrors returns null when validation passes", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
     resetEnv();
     // Access env to trigger parsing
     const _ = env.PORT;
@@ -145,6 +178,9 @@ describe("env validation", () => {
   });
 
   it("reads optional vars as undefined when not set", () => {
+    setEnvVar("NEXT_PUBLIC_SUPABASE_URL", TEST_SUPABASE_URL);
+    setEnvVar("NEXT_PUBLIC_SUPABASE_ANON_KEY", TEST_SUPABASE_ANON_KEY);
+
     setEnvVar("REDIS_URL", undefined);
     setEnvVar("OPENAI_API_KEY", undefined);
     resetEnv();

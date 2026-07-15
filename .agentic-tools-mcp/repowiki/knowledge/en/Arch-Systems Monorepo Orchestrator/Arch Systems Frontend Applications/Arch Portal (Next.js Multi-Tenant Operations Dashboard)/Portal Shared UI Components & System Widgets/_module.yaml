@@ -1,8 +1,0 @@
-schema_version: 1
-module_path: apps/portal/shared_components
-title: Portal Shared UI Components & System Widgets
-scope:
-    - apps/portal/components/
-source_files: []
-depends_on: []
-related_to: []

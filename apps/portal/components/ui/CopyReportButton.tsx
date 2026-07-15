@@ -25,10 +25,9 @@ export function CopyReportButton({ csvContent }: CopyReportButtonProps) {
   return (
     <Button
       variant="secondary"
-      shape="rounded-lg"
       size="sm"
       onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 min-w-[100px] justify-center transition-all duration-300"
+      className="inline-flex items-center gap-1.5 min-w-[100px] justify-center rounded-lg transition-all duration-300"
     >
       {copied ? (
         <>

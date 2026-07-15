@@ -330,8 +330,6 @@ export async function dedupedFetch<T>(
 
 ### Example 1: ML Prediction with Cancellation
 
-Relevant to Arch-Mk2's `apps/ai-agents` service.
-
 ```ts
 function usePrediction() {
   const controllerRef = useRef<AbortController | null>(null);

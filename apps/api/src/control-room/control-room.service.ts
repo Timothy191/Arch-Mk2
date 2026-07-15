@@ -1,9 +1,6 @@
-import { Injectable, Inject, Logger } from "@nestjs/common";
-import { SUPABASE_CLIENT } from "../supabase/supabase.constants";
-import { REDIS_CLIENT } from "../redis/redis.constants";
+import { Injectable, Logger } from "@nestjs/common";
+import { db } from "@repo/database";
 import { cacheWrap } from "@repo/redis/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { RedisClientType } from "redis";
 
 type RequiredForm =
   | "machine-operations"
@@ -23,7 +20,6 @@ interface MachineCoverageStatus {
   hoursWorked: number | null;
 }
 
-/** @public */
 export interface ShiftCompleteness {
   complete: boolean;
   totalRequired: number;
@@ -50,8 +46,7 @@ const FORM_META: Record<RequiredForm, { label: string; path: string }> = {
 
 function requiredFormFor(machineType: string): RequiredForm {
   const t = machineType.toLowerCase();
-  if (EXCAVATOR_KEYWORDS.some((k) => t.includes(k)))
-    return "excavator-activity";
+  if (EXCAVATOR_KEYWORDS.some((k) => t.includes(k))) return "excavator-activity";
   if (DOZER_KEYWORDS.some((k) => t.includes(k))) return "roll-over";
   if (DUMPER_KEYWORDS.some((k) => t.includes(k))) return "hourly-loads";
   return "machine-operations";
@@ -60,11 +55,6 @@ function requiredFormFor(machineType: string): RequiredForm {
 @Injectable()
 export class ControlRoomService {
   private readonly logger = new Logger(ControlRoomService.name);
-
-  constructor(
-    @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
-    @Inject(REDIS_CLIENT) private readonly redis: RedisClientType,
-  ) {}
 
   async getShiftCompleteness(
     deptId: string,
@@ -85,39 +75,49 @@ export class ControlRoomService {
     date: string,
     shift: "day" | "night",
   ): Promise<ShiftCompleteness> {
-    const [machines, machineOps, excavatorActs, dozerRolls, hourlyLoads] =
-      await Promise.all([
-        this.supabase
-          .from("machines")
-          .select("id, name, machine_type, report_exempt")
-          .eq("department_id", deptId)
-          .eq("active", true)
-          .order("name"),
-        this.supabase
-          .from("machine_operations")
-          .select("machine_id, hours_worked")
-          .eq("department_id", deptId)
-          .eq("shift_date", date)
-          .eq("shift_type", shift),
-        this.supabase
-          .from("excavator_activity")
-          .select("machine_id")
-          .eq("department_id", deptId)
-          .eq("activity_date", date)
-          .eq("shift_type", shift),
-        this.supabase
-          .from("dozer_rolls")
-          .select("machine_id, hours_operated")
-          .eq("department_id", deptId)
-          .eq("roll_date", date)
-          .eq("shift_type", shift),
-        this.supabase
-          .from("hourly_loads")
-          .select("machine_id, total_loads")
-          .eq("department_id", deptId)
-          .eq("load_date", date)
-          .eq("shift_type", shift),
-      ]);
+    const [
+      machines,
+      machineOps,
+      excavatorActs,
+      dozerRolls,
+      hourlyLoads,
+    ] = await Promise.all([
+      db
+        .selectFrom("machines")
+        .select(["id", "name", "machine_type", "report_exempt"])
+        .where("department_id", "=", deptId)
+        .where("active", "=", true)
+        .orderBy("name")
+        .execute(),
+      db
+        .selectFrom("machine_operations")
+        .select(["machine_id", "hours_worked"])
+        .where("department_id", "=", deptId)
+        .where("shift_date", "=", date)
+        .where("shift_type", "=", shift)
+        .execute(),
+      db
+        .selectFrom("excavator_activity")
+        .select(["machine_id"])
+        .where("department_id", "=", deptId)
+        .where("activity_date", "=", date)
+        .where("shift_type", "=", shift)
+        .execute(),
+      db
+        .selectFrom("dozer_rolls")
+        .select(["machine_id", "hours_operated"])
+        .where("department_id", "=", deptId)
+        .where("roll_date", "=", date)
+        .where("shift_type", "=", shift)
+        .execute(),
+      db
+        .selectFrom("hourly_loads")
+        .select(["machine_id", "total_loads"])
+        .where("department_id", "=", deptId)
+        .where("load_date", "=", date)
+        .where("shift_type", "=", shift)
+        .execute(),
+    ]);
 
     const rawMachines = machines.data ?? [];
     const rawMachineOps = machineOps.data ?? [];
@@ -193,7 +193,7 @@ export class ControlRoomService {
     });
 
     const required = statuses.filter((s) => !s.exempt);
-    const covered = required.filter((s) => s.hasEntry);
+    const covered = statuses.filter((s) => s.hasEntry);
 
     return {
       complete: required.length === 0 || covered.length === required.length,

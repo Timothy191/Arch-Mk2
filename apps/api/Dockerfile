@@ -3,7 +3,7 @@
 
 # ── Stage 1: deps ──────────────────────────────────────
 FROM node:22-alpine AS deps
-RUN apk add --no-cache libc6-compat && \
+RUN apk add --no-cache libc6-compat python3 make g++ && \
     npm install -g pnpm@9.15.9
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -12,8 +12,10 @@ COPY packages/supabase/package.json packages/supabase/
 COPY packages/redis/package.json packages/redis/
 COPY packages/utils/package.json packages/utils/
 COPY packages/typescript-config/package.json packages/typescript-config/
+# Skip install scripts during deps (iltorb node-gyp fails in Docker build env).
+# Node.js v16+ has native Brotli — the native addon is not needed at runtime.
 RUN --mount=type=cache,target=/pnpm-store \
-    pnpm install --frozen-lockfile --prefer-offline
+    pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
 
 # ── Stage 2: builder ───────────────────────────────────
 FROM deps AS builder

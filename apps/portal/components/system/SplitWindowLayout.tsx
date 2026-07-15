@@ -53,14 +53,14 @@ export function SplitWindowLayout({ children }: SplitWindowLayoutProps) {
 
   // Listen to custom window events dispatched from the navigation taskbar
   useEffect(() => {
-    const handleToggle = (e: event) => {
-      const customevent = e as Customevent<{ service: "github" | "whatsapp" }>;
+    const handleToggle = (e: Event) => {
+      const customevent = e as CustomEvent<{ service: "github" | "whatsapp" }>;
       if (customevent.detail?.service) {
         openTab(customevent.detail.service);
       }
     };
-    window.addeventListener("open-split-view", handleToggle);
-    return () => window.removeeventListener("open-split-view", handleToggle);
+    window.addEventListener("open-split-view", handleToggle);
+    return () => window.removeEventListener("open-split-view", handleToggle);
   }, [openTab]);
 
   const activeTab = tabs.find((t) => t.id === activeTabId);

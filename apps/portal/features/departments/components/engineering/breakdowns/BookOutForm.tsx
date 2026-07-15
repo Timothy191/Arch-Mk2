@@ -41,7 +41,7 @@ export function BookOutForm({
 
   const selectedBreakdown = activeBreakdowns.find((b) => b.id === selectedId);
 
-  const handleNormalSubmit = (e: React.Formevent) => {
+  const handleNormalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
 
@@ -69,7 +69,7 @@ export function BookOutForm({
     });
   };
 
-  const handleDirectSubmit = (e: React.Formevent) => {
+  const handleDirectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
 

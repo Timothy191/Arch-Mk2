@@ -8,7 +8,6 @@ Industrial mining-operations portal (Plantcor). pnpm + Nx/Turborepo monorepo usi
 | ---------------------------- | --------------------------------------------- |
 | `apps/portal`                | Next.js 16 (App Router) operations dashboard  |
 | `apps/api`                   | NestJS 11 backend on Fastify 5                |
-| `apps/ai-agents`             | Python 3.11+ FastAPI agent microservice       |
 | `apps/ops-gateway`           | Meta-backend / control plane (MCP, incidents) |
 | `packages/supabase`          | App-facing data access layer                  |
 | `packages/database`          | SQL migrations source of truth ONLY           |

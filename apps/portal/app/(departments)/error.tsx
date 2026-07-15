@@ -49,7 +49,7 @@ export default function DepartmentError({
       )}
       <Button
         variant="secondary"
-        shape="pill"
+        className="rounded-full"
         size="sm"
         onClick={() => unstable_retry()}
       >

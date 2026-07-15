@@ -39,7 +39,7 @@ export function BookInForm({
     [machines, selectedMachineId],
   );
 
-  const handleSubmit = (e: React.Formevent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
 

@@ -53,7 +53,7 @@ export function MachineForm({
 
   const activeSites = sites.filter((s) => s.active || s.id === siteId);
 
-  const handleSubmit = (e: React.Formevent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       name,

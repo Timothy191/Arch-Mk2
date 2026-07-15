@@ -14,7 +14,7 @@ import {
   type Rule,
   type RuleContext,
   type RuleResult,
-} from "@arch/rust-bindings";
+} from "../../../packages/rust-bindings/src/index";
 
 // ── Cache Instance (server-wide singleton) ────────────────
 

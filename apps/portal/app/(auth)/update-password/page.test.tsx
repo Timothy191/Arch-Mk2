@@ -2,7 +2,7 @@ import {
   render,
   screen,
   waitFor,
-  fireevent,
+  fireEvent,
   act,
 } from "@testing-library/react";
 import { UpdatePasswordForm } from "./UpdatePasswordForm";
@@ -36,7 +36,7 @@ jest.mock("@repo/ui/AnimatedButton", () => ({
     disabled?: boolean;
     className?: string;
     type?: "button" | "submit" | "reset";
-    onClick?: React.MouseeventHandler<HTMLButtonElement>;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
   }) => (
     <button
       type={type}
@@ -129,14 +129,14 @@ describe("UpdatePasswordForm", () => {
       expect(screen.getByLabelText("New Password")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText("New Password"), {
+    fireEvent.change(screen.getByLabelText("New Password"), {
       target: { value: "password123" },
     });
-    fireevent.change(screen.getByLabelText("Confirm Password"), {
+    fireEvent.change(screen.getByLabelText("Confirm Password"), {
       target: { value: "password456" },
     });
 
-    fireevent.submit(screen.getByLabelText("New Password").closest("form")!);
+    fireEvent.submit(screen.getByLabelText("New Password").closest("form")!);
 
     expect(screen.getByText("Passwords do not match.")).toBeInTheDocument();
     expect(mockUpdateUser).not.toHaveBeenCalled();
@@ -153,14 +153,14 @@ describe("UpdatePasswordForm", () => {
       expect(screen.getByLabelText("New Password")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText("New Password"), {
+    fireEvent.change(screen.getByLabelText("New Password"), {
       target: { value: "pass" },
     });
-    fireevent.change(screen.getByLabelText("Confirm Password"), {
+    fireEvent.change(screen.getByLabelText("Confirm Password"), {
       target: { value: "pass" },
     });
 
-    fireevent.submit(screen.getByLabelText("New Password").closest("form")!);
+    fireEvent.submit(screen.getByLabelText("New Password").closest("form")!);
 
     expect(
       screen.getByText("Password must be at least 8 characters."),
@@ -182,14 +182,14 @@ describe("UpdatePasswordForm", () => {
       expect(screen.getByLabelText("New Password")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText("New Password"), {
+    fireEvent.change(screen.getByLabelText("New Password"), {
       target: { value: "password123" },
     });
-    fireevent.change(screen.getByLabelText("Confirm Password"), {
+    fireEvent.change(screen.getByLabelText("Confirm Password"), {
       target: { value: "password123" },
     });
 
-    fireevent.submit(screen.getByLabelText("New Password").closest("form")!);
+    fireEvent.submit(screen.getByLabelText("New Password").closest("form")!);
 
     await waitFor(() => {
       expect(screen.getByText(/Password is too weak/i)).toBeInTheDocument();
@@ -210,14 +210,14 @@ describe("UpdatePasswordForm", () => {
       expect(screen.getByLabelText("New Password")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText("New Password"), {
+    fireEvent.change(screen.getByLabelText("New Password"), {
       target: { value: "password123" },
     });
-    fireevent.change(screen.getByLabelText("Confirm Password"), {
+    fireEvent.change(screen.getByLabelText("Confirm Password"), {
       target: { value: "password123" },
     });
 
-    fireevent.submit(screen.getByLabelText("New Password").closest("form")!);
+    fireEvent.submit(screen.getByLabelText("New Password").closest("form")!);
 
     await waitFor(() => {
       expect(
@@ -237,14 +237,14 @@ describe("UpdatePasswordForm", () => {
       expect(screen.getByLabelText("New Password")).toBeInTheDocument();
     });
 
-    fireevent.change(screen.getByLabelText("New Password"), {
+    fireEvent.change(screen.getByLabelText("New Password"), {
       target: { value: "validpassword123" },
     });
-    fireevent.change(screen.getByLabelText("Confirm Password"), {
+    fireEvent.change(screen.getByLabelText("Confirm Password"), {
       target: { value: "validpassword123" },
     });
 
-    fireevent.submit(screen.getByLabelText("New Password").closest("form")!);
+    fireEvent.submit(screen.getByLabelText("New Password").closest("form")!);
 
     await waitFor(() => {
       expect(screen.getByText("Password Updated")).toBeInTheDocument();

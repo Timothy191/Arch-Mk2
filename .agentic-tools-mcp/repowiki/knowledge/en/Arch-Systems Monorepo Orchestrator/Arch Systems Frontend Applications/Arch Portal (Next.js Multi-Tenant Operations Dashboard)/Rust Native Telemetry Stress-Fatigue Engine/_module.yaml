@@ -1,8 +1,0 @@
-schema_version: 1
-module_path: apps/portal/rust_telemetry_plugin
-title: Rust Native Telemetry Stress-Fatigue Engine
-scope:
-    - apps/portal/plugins/rust-telemetry-engine/
-source_files: []
-depends_on: []
-related_to: []

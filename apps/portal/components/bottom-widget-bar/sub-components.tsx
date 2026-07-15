@@ -200,12 +200,12 @@ function OperationsWheelItem({
           const DeptIcon = dept.icon;
           return (
             <DropdownMenuItem
-              key={dept.name}
+              key={dept.type}
               asChild
               className="cursor-pointer hover:bg-black/[0.04] focus:bg-black/[0.04] rounded-md mx-1 my-0.5"
             >
               <Link
-                href={`/${dept.name}`}
+                href={`/${dept.type}`}
                 onClick={onNavigate}
                 className="w-full flex items-center px-2 py-1.5"
               >
@@ -213,7 +213,7 @@ function OperationsWheelItem({
                   <DeptIcon className={cn("w-3.5 h-3.5", dept.color)} />
                 </div>
                 <span className="text-[13px] font-medium text-[var(--text-heading)]">
-                  {dept.displayName}
+                  {dept.label}
                 </span>
               </Link>
             </DropdownMenuItem>
@@ -261,18 +261,18 @@ function ToolsWheelItem({
           const ToolIcon = tool.icon;
           return (
             <DropdownMenuItem
-              key={tool.name}
+              key={tool.type}
               asChild
               className="cursor-pointer hover:bg-black/[0.04] focus:bg-black/[0.04] rounded-md mx-1 my-0.5"
             >
               <Link
-                href={`/drilling/tools?tab=${tool.name}`}
+                href={`/drilling/tools?tab=${tool.type}`}
                 onClick={onNavigate}
                 className="w-full flex items-center px-2 py-1.5 gap-2.5"
               >
-                <ToolIcon className={cn("w-4 h-4 shrink-0", tool.colorClass)} />
+                <ToolIcon className={cn("w-4 h-4 shrink-0", tool.color)} />
                 <span className="text-[13px] font-medium text-[var(--text-heading)]">
-                  {tool.displayName}
+                  {tool.label}
                 </span>
               </Link>
             </DropdownMenuItem>

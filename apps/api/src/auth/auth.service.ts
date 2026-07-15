@@ -1,61 +1,121 @@
 import { Injectable, Inject, UnauthorizedException } from "@nestjs/common";
-import bcrypt from "bcryptjs";
-import { SUPABASE_CLIENT } from "../supabase/supabase.constants";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { db } from "@repo/database";
+import * as bcrypt from "bcryptjs";
+import * as jwt from "jsonwebtoken";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @Inject(SUPABASE_CLIENT)
-    private readonly supabase: SupabaseClient,
-  ) {}
+  // JWT secret from environment
+  private readonly jwtSecret = process.env.JWT_SECRET || "fallback-secret";
 
   async login(email: string, password: string) {
     if (!email || !password) {
       throw new UnauthorizedException("Email and password are required");
     }
 
-    const { data, error } = await this.supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    // Find user in auth.users by email
+    const userResult = await db
+      .selectFrom("auth.users")
+      .select(["id", "email", "encrypted_password", "raw_user_meta_data"])
+      .where("email", "=", email)
+      .execute();
 
-    if (error) {
-      const isRateLimitError = error.message
-        .toLowerCase()
-        .includes("rate limit");
-      throw new UnauthorizedException(
-        isRateLimitError
-          ? "Too many attempts. Please wait a moment and try again."
-          : "Invalid credentials",
-      );
+    if (userResult.length === 0) {
+      // Do not reveal that the user does not exist
+      throw new UnauthorizedException("Invalid credentials");
     }
 
+    const user = userResult[0];
+    const encryptedPassword = user.encrypted_password as string;
+
+    // Compare password
+    const passwordMatch = await bcrypt.compare(password, encryptedPassword);
+    if (!passwordMatch) {
+      throw new UnauthorizedException("Invalid credentials");
+    }
+
+    // Get employee record linked to this auth user
+    const employeeResult = await db
+      .selectFrom("employees")
+      .select(["id", "auth_id", "department_id", "full_name", "role", "accessible_departments"])
+      .where("auth_id", "=", user.id)
+      .execute();
+
+    const employee = employeeResult.length > 0 ? employeeResult[0] : null;
+
+    // Generate JWT token
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: employee?.role ?? null,
+      departmentId: employee?.department_id ?? null,
+    };
+    const accessToken = jwt.sign(payload, this.jwtSecret, { expiresIn: "1h" });
+
     return {
-      user: data.user,
-      session: data.session,
+      user: {
+        id: user.id,
+        email: user.email,
+        ...(user.raw_user_meta_data as { [key: string]: any } || {}),
+      },
+      session: {
+        accessToken,
+        // We could also include a refresh token if needed
+      },
+      employee,
     };
   }
 
   async validateUser(accessToken: string) {
-    const {
-      data: { user },
-      error,
-    } = await this.supabase.auth.getUser(accessToken);
+    try {
+      const payload = jwt.verify(accessToken, this.jwtSecret) as {
+        sub: string;
+        email: string;
+        role: string | null;
+        departmentId: string | null;
+      };
 
-    if (error || !user) {
+      // Fetch the user from auth.users to ensure it still exists
+      const userResult = await db
+        .selectFrom("auth.users")
+        .select(["id", "email", "raw_user_meta_data"])
+        .where("id", "=", payload.sub)
+        .execute();
+
+      if (userResult.length === 0) {
+        throw new UnauthorizedException("User not found");
+      }
+
+      const user = userResult[0];
+
+      // Optionally fetch employee again for fresh data
+      const employeeResult = await db
+        .selectFrom("employees")
+        .select(["id", "auth_id", "department_id", "full_name", "role", "accessible_departments"])
+        .where("auth_id", "=", user.id)
+        .execute();
+
+      const employee = employeeResult.length > 0 ? employeeResult[0] : null;
+
+      return {
+        id: user.id,
+        email: user.email,
+        ...(user.raw_user_meta_data as { [key: string]: any } || {}),
+      };
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        throw new UnauthorizedException("Invalid token");
+      }
       throw new UnauthorizedException();
     }
-
-    return user;
   }
 
   async getEmployeeByAuthId(userId: string) {
-    const { data } = await this.supabase
-      .from("employees")
-      .select("role, department_id, accessible_departments")
-      .eq("auth_id", userId)
-      .single();
+    const { data } = await db
+      .selectFrom("employees")
+      .select(["id", "auth_id", "department_id", "full_name", "role", "accessible_departments"])
+      .where("auth_id", "=", userId)
+      .execute();
 
     return data ?? null;
   }

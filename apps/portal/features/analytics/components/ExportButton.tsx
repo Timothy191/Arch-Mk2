@@ -27,13 +27,13 @@ export function ExportButton({ filename, rows }: ExportButtonProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleClickOutside(event: Mouseevent) {
+    function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
-    document.addeventListener("mousedown", handleClickOutside);
-    return () => document.removeeventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleExportCsv = () => {

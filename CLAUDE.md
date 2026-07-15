@@ -10,7 +10,6 @@ Arch-Systems (Plantcor) is an industrial mining-operations portal. It is a **pnp
 | ------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------- |
 | `apps/portal`                                                                   | Next.js 16 operations dashboard (main app)           | `3000`, Turbopack dev                   |
 | `apps/api`                                                                      | NestJS 11 backend on Fastify 5                       | `3004` by default, global prefix `/api` |
-| `apps/ai-agents`                                                                | FastAPI CrewAI/LangGraph orchestration (stub)        | Python 3.11+, no fixed port             |
 | `packages/supabase`                                                             | Data access layer: `@supabase/ssr`, Kysely, typed DB | consumed by apps                        |
 | `packages/database`                                                             | SQL migrations source of truth ONLY                  | not imported directly by apps           |
 | `packages/theme`                                                                | OKLCH design tokens + Tailwind preset                | source: `src/css/variables.css`         |

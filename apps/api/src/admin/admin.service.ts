@@ -1,13 +1,11 @@
 import {
   Injectable,
-  Inject,
   Logger,
   NotFoundException,
   ForbiddenException,
   BadRequestException,
 } from "@nestjs/common";
-import { SUPABASE_CLIENT } from "../supabase/supabase.constants";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { db } from "@repo/database";
 import { adminDataUpdateSchema } from "../common/schemas";
 
 const OPERATIONAL_TABLES = new Set([
@@ -50,10 +48,6 @@ const OPERATIONAL_TABLES = new Set([
 export class AdminService {
   private readonly logger = new Logger(AdminService.name);
 
-  constructor(
-    @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
-  ) {}
-
   validateTable(table: string): string {
     const normalized = table.toLowerCase();
     if (!OPERATIONAL_TABLES.has(normalized)) {
@@ -69,18 +63,15 @@ export class AdminService {
     orderBy: string,
     orderDir: "asc" | "desc",
   ) {
-    const { data, error, count } = await this.supabase
-      .from(table)
-      .select("*", { count: "exact" })
-      .order(orderBy, { ascending: orderDir === "asc" })
-      .range(offset, offset + limit - 1);
+    const { data, count } = await db
+      .selectFrom(table)
+      .select("*")
+      .orderBy(orderBy, orderDir === "asc" ? "asc" : "desc")
+      .limit(limit)
+      .offset(offset)
+      .execute();
 
-    if (error) {
-      this.logger.error("Database query failed", error.message);
-      throw new Error("Database query failed");
-    }
-
-    return { data, count, limit, offset };
+    return { data: data ?? [], count: count ?? 0, limit, offset };
   }
 
   async updateData(
@@ -99,26 +90,34 @@ export class AdminService {
     }
 
     // Get before state for audit
-    const { data: before } = await this.supabase
-      .from(table)
+    const { data: before } = await db
+      .selectFrom(table)
       .select("*")
-      .eq("id", id)
-      .single();
+      .where("id", "=", id)
+      .execute();
 
-    const { error } = await this.supabase.from(table).update(data).eq("id", id);
+    const { error } = await db
+      .updateTable(table)
+      .set(data)
+      .where("id", "=", id)
+      .execute();
+
     if (error) {
       this.logger.error("Update failed", error.message);
       throw new Error("Update failed");
     }
 
-    await this.supabase.from("audit_logs").insert({
-      action: "update",
-      table_name: table,
-      record_id: id,
-      old_data: before ?? null,
-      new_data: data,
-      performed_by: employeeId,
-    });
+    await db
+      .insertInto("audit_logs")
+      .values({
+        action: "update",
+        table_name: table,
+        record_id: id,
+        old_data: before ?? null,
+        new_data: data,
+        performed_by: employeeId,
+      })
+      .execute();
 
     return { success: true };
   }
@@ -129,35 +128,42 @@ export class AdminService {
     }
 
     // Get before state for audit
-    const { data: before } = await this.supabase
-      .from(table)
+    const { data: before } = await db
+      .selectFrom(table)
       .select("*")
-      .eq("id", id)
-      .single();
+      .where("id", "=", id)
+      .execute();
 
-    const { error } = await this.supabase.from(table).delete().eq("id", id);
+    const { error } = await db
+      .deleteFrom(table)
+      .where("id", "=", id)
+      .execute();
+
     if (error) {
       this.logger.error("Delete failed", error.message);
       throw new Error("Delete failed");
     }
 
-    await this.supabase.from("audit_logs").insert({
-      action: "delete",
-      table_name: table,
-      record_id: id,
-      old_data: before ?? null,
-      performed_by: employeeId,
-    });
+    await db
+      .insertInto("audit_logs")
+      .values({
+        action: "delete",
+        table_name: table,
+        record_id: id,
+        old_data: before ?? null,
+        performed_by: employeeId,
+      })
+      .execute();
 
     return { success: true };
   }
 
   async assertAdmin(userId: string) {
-    const { data: employee } = await this.supabase
-      .from("employees")
-      .select("id, role")
-      .eq("auth_id", userId)
-      .single();
+    const { data: employee } = await db
+      .selectFrom("employees")
+      .select(["id", "role"])
+      .where("auth_id", "=", userId)
+      .execute();
 
     if (!employee || employee.role !== "admin") {
       throw new ForbiddenException("Forbidden");

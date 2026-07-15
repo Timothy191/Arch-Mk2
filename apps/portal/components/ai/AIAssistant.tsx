@@ -44,7 +44,7 @@ export function AIAssistant({ context, className }: AIAssistantProps) {
   }, []);
 
   useEffect(() => {
-    function onKeyDown(e: Keyboardevent) {
+    function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape" && isOpen) {
         setIsOpen(false);
         return;
@@ -71,11 +71,11 @@ export function AIAssistant({ context, className }: AIAssistantProps) {
         }
       }
     }
-    window.addeventListener("keydown", onKeyDown);
-    window.addeventListener("open-ai-assistant", openPanel);
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("open-ai-assistant", openPanel);
     return () => {
-      window.removeeventListener("keydown", onKeyDown);
-      window.removeeventListener("open-ai-assistant", openPanel);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("open-ai-assistant", openPanel);
     };
   }, [isOpen, openPanel]);
 
@@ -126,7 +126,7 @@ export function AIAssistant({ context, className }: AIAssistantProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  function handleSubmit(e: React.Formevent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
     append({ role: "user", content: input });

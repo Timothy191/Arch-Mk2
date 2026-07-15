@@ -96,7 +96,7 @@ export function DozerRollForm({
     setIsOpen(false);
   };
 
-  const handleSubmit = async (e: React.Formevent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 

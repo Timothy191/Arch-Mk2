@@ -278,7 +278,7 @@ function DepartmentForm({
   const [color, setColor] = useState(department?.color || "blue");
   const [description, setDescription] = useState(department?.description || "");
 
-  const handleSubmit = (e: React.Formevent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({ name, display_name: displayName, icon, color, description });
   };

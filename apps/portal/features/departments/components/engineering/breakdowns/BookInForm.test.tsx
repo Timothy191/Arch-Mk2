@@ -1,4 +1,4 @@
-import { render, screen, fireevent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BookInForm } from "./BookInForm";
 import type { Breakdown, Machine } from "./types";
 
@@ -121,7 +121,7 @@ describe("BookInForm", () => {
       />,
     );
 
-    fireevent.submit(
+    fireEvent.submit(
       screen.getByRole("button", { name: /Book In Machine/i }).closest("form")!,
     );
 
@@ -140,13 +140,13 @@ describe("BookInForm", () => {
       />,
     );
 
-    fireevent.change(screen.getByLabelText(/Select Machine/i), {
+    fireEvent.change(screen.getByLabelText(/Select Machine/i), {
       target: { value: "m-1" },
     });
-    fireevent.change(screen.getByPlaceholderText(/Describe the issue/i), {
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue/i), {
       target: { value: "hi" },
     });
-    fireevent.click(screen.getByRole("button", { name: /Book In Machine/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Book In Machine/i }));
 
     await waitFor(() => {
       expect(
@@ -165,14 +165,14 @@ describe("BookInForm", () => {
       />,
     );
 
-    fireevent.change(screen.getByLabelText(/Select Machine/i), {
+    fireEvent.change(screen.getByLabelText(/Select Machine/i), {
       target: { value: "m-1" },
     });
-    fireevent.change(screen.getByPlaceholderText(/Describe the issue/i), {
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue/i), {
       target: { value: "Hydraulic pump failure" },
     });
 
-    fireevent.click(screen.getByRole("button", { name: /Book In Machine/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Book In Machine/i }));
 
     await waitFor(() => {
       expect(createBreakdown).toHaveBeenCalledWith(
@@ -204,13 +204,13 @@ describe("BookInForm", () => {
       />,
     );
 
-    fireevent.change(screen.getByLabelText(/Select Machine/i), {
+    fireEvent.change(screen.getByLabelText(/Select Machine/i), {
       target: { value: "m-1" },
     });
-    fireevent.change(screen.getByPlaceholderText(/Describe the issue/i), {
+    fireEvent.change(screen.getByPlaceholderText(/Describe the issue/i), {
       target: { value: "Hydraulic pump failure" },
     });
-    fireevent.click(screen.getByRole("button", { name: /Book In Machine/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Book In Machine/i }));
 
     await waitFor(() => {
       expect(

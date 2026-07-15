@@ -7,8 +7,8 @@ import {
   DialogHeader, 
   DialogTitle, 
   DialogClose 
-} from "@repo/ui/ui/dialog";
-import { Button } from "@repo/ui/ui/button";
+} from "@repo/ui/components/ui/dialog";
+import { Button } from "@repo/ui/components/ui/button";
 import { X, Bot } from 'lucide-react';
 
 interface EveAgent {

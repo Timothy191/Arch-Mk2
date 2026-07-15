@@ -21,38 +21,42 @@ import { z } from "zod";
 // ---------------------------------------------------------------------------
 
 const baseEnvSchema = z.object({
-  // ── Public (embedded in client bundle — safe defaults for dev) ──────
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().default("http://127.0.0.1:54321"),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).default("dummy-anon-key"),
+  // ── Public (embedded in client bundle) ───────────────────────────────
+  //
+  // IMPORTANT:
+  // Never ship placeholder Supabase credentials. Missing values should fail
+  // fast so the app can't run against dummy/local instances unintentionally.
+  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
 
-  // ── Server-side required ───────────────────────────────────────────
+  // ── Server-side required ──────────────────────────────────────────────
   SUPABASE_URL: z.string().url().optional(),
   SUPABASE_ANON_KEY: z.string().optional(),
   SUPABASE_SERVICE_KEY: z.string().optional(),
   DATABASE_URL: z.string().optional(),
 
-  // ── Server — optional with defaults ────────────────────────────────
+  // ── Server — optional with defaults ───────────────────────────────────
   PORT: z.coerce.number().int().positive().default(3000),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
 
-  // ── Redis (optional, used only when configured) ────────────────────
+  // ── Redis (optional, used only when configured) ──────────────────────
   REDIS_URL: z.string().optional(),
 
-  // ── LLM / AI providers (optional) ──────────────────────────────────
+  // ── LLM / AI providers (optional) ─────────────────────────────────────
   OLLAMA_URL: z.string().url().default("http://localhost:11434"),
   OLLAMA_DEFAULT_MODEL: z.string().default("gemma4:latest"),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().optional(),
 
-  // ── Sentry (optional) ──────────────────────────────────────────────
+  // ── Sentry (optional) ─────────────────────────────────────────────────
   SENTRY_ORG: z.string().optional(),
   SENTRY_PROJECT: z.string().optional(),
   SENTRY_AUTH_TOKEN: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().url().optional(),
 
-  // ── External services (optional) ───────────────────────────────────
+  // ── External services (optional) ─────────────────────────────────────
   N8N_URL: z.string().url().optional(),
   NEXT_PUBLIC_N8N_URL: z.string().url().optional(),
   N8N_USER: z.string().optional(),
@@ -64,7 +68,7 @@ const baseEnvSchema = z.object({
   API_BASE_URL: z.string().url().optional(),
   NEXT_PUBLIC_API_URL: z.string().url().optional(),
 
-  // ── Feature flags ──────────────────────────────────────────────────
+  // ── Feature flags ─────────────────────────────────────────────────────
   ENABLE_LOAD_ADAPTIVE_TEST: z
     .string()
     .default("false")
@@ -74,7 +78,7 @@ const baseEnvSchema = z.object({
     .default("false")
     .transform((v) => v === "true"),
 
-  // ── Rate limiting ──────────────────────────────────────────────────
+  // ── Rate limiting ─────────────────────────────────────────────────────
   RATE_LIMIT_IP_WHITELIST: z.string().optional(),
   DISABLE_CORS: z
     .string()
@@ -82,13 +86,13 @@ const baseEnvSchema = z.object({
     .transform((v) => v === "true"),
   ALLOWED_ORIGINS: z.string().optional(),
 
-  // ── Inngest / Background jobs ──────────────────────────────────────
+  // ── Inngest / Background jobs ─────────────────────────────────────────
   INNGEST_EVENT_KEY: z.string().optional(),
 
-  // ── Novu (notifications) ───────────────────────────────────────────
+  // ── Novu (notifications) ──────────────────────────────────────────────
   NOVU_API_KEY: z.string().optional(),
 
-  // ── Observability ──────────────────────────────────────────────────
+  // ── Observability ─────────────────────────────────────────────────────
   OTEL_EXPORTER_OTLP_ENDPOINT: z.string().url().optional(),
   OTEL_SERVICE_NAME: z.string().default("arch-portal"),
   ENABLE_DB_TRACING: z
@@ -97,7 +101,7 @@ const baseEnvSchema = z.object({
     .transform((v) => v === "true"),
   SLOW_QUERY_THRESHOLD_MS: z.coerce.number().int().positive().default(500),
 
-  // ── Version ────────────────────────────────────────────────────────
+  // ── Version ────────────────────────────────────────────────────────────
   PORTAL_VERSION: z.string().default("1.0.0"),
   VERCEL_ENV: z.string().optional(),
   CI: z
@@ -106,7 +110,24 @@ const baseEnvSchema = z.object({
     .transform((v) => v === "true"),
 });
 
+// Enforce real creds: fail fast if public supabase config is missing.
 const envSchema = baseEnvSchema.superRefine((val, ctx) => {
+  if (!val.NEXT_PUBLIC_SUPABASE_URL) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Missing NEXT_PUBLIC_SUPABASE_URL",
+      path: ["NEXT_PUBLIC_SUPABASE_URL"],
+    });
+  }
+  if (!val.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Missing NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      path: ["NEXT_PUBLIC_SUPABASE_ANON_KEY"],
+    });
+  }
+
+  // Production safety constraints (explicitly disallow placeholder values).
   if (val.NODE_ENV === "production") {
     if (val.NEXT_PUBLIC_SUPABASE_URL === "http://127.0.0.1:54321") {
       ctx.addIssue({
@@ -136,28 +157,33 @@ let _envError: z.ZodError | null = null;
 
 /**
  * Returns validated environment variables.
- * In production, throws on missing required vars.
- * In dev/test, uses defaults where possible and logs warnings.
+ * Fails fast if Supabase public credentials are missing/invalid (including dev/test).
  */
 function parseEnv(): EnvVars {
   const raw = {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
     SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY,
     DATABASE_URL: process.env.DATABASE_URL,
+
     PORT: process.env.PORT,
     NODE_ENV: process.env.NODE_ENV,
+
     REDIS_URL: process.env.REDIS_URL,
+
     OLLAMA_URL: process.env.OLLAMA_URL,
     OLLAMA_DEFAULT_MODEL: process.env.OLLAMA_DEFAULT_MODEL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     OPENAI_MODEL: process.env.OPENAI_MODEL,
+
     SENTRY_ORG: process.env.SENTRY_ORG,
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+
     N8N_URL: process.env.N8N_URL,
     NEXT_PUBLIC_N8N_URL: process.env.NEXT_PUBLIC_N8N_URL,
     N8N_USER: process.env.N8N_USER,
@@ -165,15 +191,24 @@ function parseEnv(): EnvVars {
     NEXT_PUBLIC_FUXA_URL: process.env.NEXT_PUBLIC_FUXA_URL,
     NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID:
       process.env.NEXT_PUBLIC_HIGHLIGHT_PROJECT_ID,
+
     API_BASE_URL: process.env.API_BASE_URL,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+
     ENABLE_LOAD_ADAPTIVE_TEST: process.env.ENABLE_LOAD_ADAPTIVE_TEST,
     DISABLE_RATE_LIMIT: process.env.DISABLE_RATE_LIMIT,
     RATE_LIMIT_IP_WHITELIST: process.env.RATE_LIMIT_IP_WHITELIST,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     NOVU_API_KEY: process.env.NOVU_API_KEY,
+
+    DISABLE_CORS: process.env.DISABLE_CORS,
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+
     OTEL_EXPORTER_OTLP_ENDPOINT: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
     OTEL_SERVICE_NAME: process.env.OTEL_SERVICE_NAME,
+    ENABLE_DB_TRACING: process.env.ENABLE_DB_TRACING,
+    SLOW_QUERY_THRESHOLD_MS: process.env.SLOW_QUERY_THRESHOLD_MS,
+
     PORTAL_VERSION: process.env.PORTAL_VERSION,
     VERCEL_ENV: process.env.VERCEL_ENV,
     CI: process.env.CI,
@@ -184,37 +219,15 @@ function parseEnv(): EnvVars {
   if (!result.success) {
     _envError = result.error;
 
-    if (raw.NODE_ENV === "production") {
-      const missing = result.error.issues
-        .filter(
-          (i) =>
-            i.code === "invalid_type" &&
-            "received" in i &&
-            i.received === "undefined",
-        )
-        .map((i) => i.path.join("."));
-      if (missing.length > 0) {
-        console.error(
-          `[env] Missing required environment variables:\n  ${missing.join("\n  ")}`,
-        );
-        throw new Error(
-          `Missing required environment variables: ${missing.join(", ")}`,
-        );
-      }
-    }
-
-    // Non-critical — log warning and still apply defaults/values where possible
-    console.warn(
-      "[env] Some environment variables have warnings:",
-      result.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`),
+    const messages = result.error.issues.map(
+      (i) => `${i.path.join(".")}: ${i.message}`,
     );
 
-    // If the only issues are non-critical custom checks (e.g. production
-    // safety warnings), fall back to the base schema so that valid custom
-    // values are not discarded.
-    // AGENT-TRACE: fallback to base schema so production warnings don't discard valid custom values (fixes env.test.ts).
-    const baseResult = baseEnvSchema.safeParse(raw);
-    return baseResult.data ?? ({} as EnvVars);
+    // Always fail fast because this file is used at module load time and the
+    // portal can't operate safely with placeholder Supabase creds.
+    console.error("[env] Invalid environment variables:\n  " + messages.join("\n  "));
+
+    throw new Error("Invalid environment variables (Supabase public config missing/invalid)");
   }
 
   return result.data;
@@ -222,7 +235,6 @@ function parseEnv(): EnvVars {
 
 /**
  * Validated environment variables singleton.
- * Falls back to defaults in dev; fails fast in prod.
  */
 export const env: Readonly<EnvVars> = new Proxy<EnvVars>({} as EnvVars, {
   get(_target, prop: string | symbol) {

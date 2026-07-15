@@ -1,30 +1,34 @@
 # Ops-Gateway Dockerfile — Meta-Backend / Control Plane (MCP + Incident Engine)
 # Three stages: deps → builder → production
+# Build context must be monorepo root (.) — same as portal and API Dockerfiles
 
 # ── Stage 1: deps ──────────────────────────────────────
 FROM node:22-alpine AS deps
 RUN apk add --no-cache libc6-compat && \
     npm install -g pnpm@9.15.9
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml ./
+COPY apps/ops-gateway/package.json ./apps/ops-gateway/
+COPY pnpm-lock.yaml ./
 RUN --mount=type=cache,target=/pnpm-store \
-    pnpm install --frozen-lockfile --prefer-offline
+    pnpm install --filter ops-gateway --no-frozen-lockfile
 
 # ── Stage 2: builder ───────────────────────────────────
 FROM deps AS builder
 WORKDIR /app
-COPY . .
+COPY apps/ops-gateway/ ./apps/ops-gateway/
 ENV NODE_ENV=production
-RUN pnpm build
+WORKDIR /app/apps/ops-gateway
+RUN npx tsc
 
 # ── Stage 3: production ──────────────────────────────────
 FROM node:22-alpine AS production
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/ops-gateway/dist ./dist
+COPY --from=builder /app/apps/ops-gateway/package.json ./
+COPY --from=builder /app/apps/ops-gateway/node_modules ./node_modules
 
 ENV NODE_ENV=production
 ENV OPS_API_URL=http://host.docker.internal:3001/api/ops

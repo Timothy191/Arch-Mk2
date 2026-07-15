@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { EveDrawer } from "../eve/eve-drawer";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
@@ -28,7 +27,6 @@ export function BottomWidgetBar({
 }) {
   const { enabled: isFocusMode } = useFocusMode();
   const [isOpen, setIsOpen] = useState(false);
-  const [isEveOpen, setIsEveOpen] = useState(false);
   const pathname = usePathname();
 
   const isTopMerged =
@@ -47,26 +45,26 @@ export function BottomWidgetBar({
   /* Click outside to close */
   useEffect(() => {
     if (!isOpen) return;
-    const handleClick = (e: Mouseevent) => {
+    const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.closest("[data-dock-root]")) {
         setIsOpen(false);
       }
     };
-    document.addeventListener("mousedown", handleClick);
-    return () => document.removeeventListener("mousedown", handleClick);
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, [isOpen]);
 
   /* Keyboard shortcut */
   useEffect(() => {
-    const handleKeyDown = (e: Keyboardevent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.key.toLowerCase() === "d") {
         e.preventDefault();
         setIsOpen((prev) => !prev);
       }
     };
-    window.addeventListener("keydown", handleKeyDown);
-    return () => window.removeeventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   /* ── Drag state ── */
@@ -95,12 +93,12 @@ export function BottomWidgetBar({
     const onResize = () => {
       setPos((prev) => (prev ? clampDockPosition(prev) : null));
     };
-    window.addeventListener("resize", onResize);
-    return () => window.removeeventListener("resize", onResize);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [isFloating]);
 
   const handlePointerDown = useCallback(
-    (e: React.Pointerevent) => {
+    (e: React.PointerEvent) => {
       if (e.button !== 0) return;
       suppressNextClick.current = false;
 
@@ -114,7 +112,7 @@ export function BottomWidgetBar({
 
       setIsDragging(true);
 
-      const onMove = (ev: Pointerevent) => {
+      const onMove = (ev: PointerEvent) => {
         const dx = ev.clientX - e.clientX;
         const dy = ev.clientY - e.clientY;
         if (
@@ -135,9 +133,9 @@ export function BottomWidgetBar({
       };
 
       const onUp = () => {
-        window.removeeventListener("pointermove", onMove);
-        window.removeeventListener("pointerup", onUp);
-        window.removeeventListener("pointercancel", onUp);
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        window.removeEventListener("pointercancel", onUp);
         setIsDragging(false);
         if (hasMoved) {
           suppressNextClick.current = true;
@@ -153,14 +151,14 @@ export function BottomWidgetBar({
         }
       };
 
-      window.addeventListener("pointermove", onMove);
-      window.addeventListener("pointerup", onUp);
-      window.addeventListener("pointercancel", onUp);
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+      window.addEventListener("pointercancel", onUp);
     },
     [setIsOpen],
   );
 
-  const handleClickCapture = useCallback((e: React.Mouseevent) => {
+  const handleClickCapture = useCallback((e: React.MouseEvent) => {
     if (suppressNextClick.current) {
       e.stopPropagation();
       suppressNextClick.current = false;
@@ -289,28 +287,17 @@ export function BottomWidgetBar({
                       : 108
                     : innerRadius;
                   
-                  // Special handler for eve
-                  const handleNavigate = () => {
-                    if (item.label === 'eve') {
-                        setIsEveOpen(true);
-                        close();
-                    } else {
-                        close();
-                    }
-                  };
 
-                  // If it's eve, we give it a dummy href so it renders as a Link
-                  const itemProps = item.label === 'eve' ? { ...item, href: "#" } : item;
 
                   return (
                     <WheelItem
                       key={item.label}
-                      item={itemProps}
+                      item={item}
                       angle={angle}
                       radius={radius}
                       index={OUTER_ITEMS.length + i}
                       isActive={false}
-                      onNavigate={handleNavigate}
+                      onNavigate={close}
                       side={isLeftDocked ? "right" : "top"}
                     />
                   );
@@ -321,6 +308,5 @@ export function BottomWidgetBar({
         </div>
       </div>
     </div>
-      <EveDrawer open={isEveOpen} onClose={() => setIsEveOpen(false)} />
   );
 }

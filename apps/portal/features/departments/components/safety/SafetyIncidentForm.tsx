@@ -80,7 +80,7 @@ export function SafetyIncidentForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.Formevent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);

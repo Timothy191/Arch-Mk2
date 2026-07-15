@@ -1,8 +1,0 @@
-schema_version: 1
-module_path: apps/cms
-title: CMS Admin & Content API (Payload + Next.js)
-scope:
-    - apps/cms/
-source_files: []
-depends_on: []
-related_to: []

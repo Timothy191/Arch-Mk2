@@ -1,8 +1,0 @@
-schema_version: 1
-module_path: tools_memex/vscode_extension
-title: memex VS Code Extension — Knowledge Graph Panel
-scope:
-    - tools/memex/memex-vscode/
-source_files: []
-depends_on: []
-related_to: []

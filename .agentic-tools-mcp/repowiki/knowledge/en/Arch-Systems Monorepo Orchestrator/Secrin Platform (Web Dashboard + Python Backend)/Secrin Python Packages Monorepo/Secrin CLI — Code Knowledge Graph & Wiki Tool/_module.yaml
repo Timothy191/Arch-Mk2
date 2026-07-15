@@ -1,8 +1,0 @@
-schema_version: 1
-module_path: tools_secrin/python_packages/cli
-title: Secrin CLI — Code Knowledge Graph & Wiki Tool
-scope:
-    - tools/secrin/packages/cli/
-source_files: []
-depends_on: []
-related_to: []

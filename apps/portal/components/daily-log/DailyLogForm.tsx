@@ -91,7 +91,7 @@ export function DailyLogForm({ departmentId, machines }: DailyLogFormProps) {
       <div className="flex items-center gap-4">
         <Button
           variant="secondary"
-          shape="pill"
+          className="rounded-full"
           type="submit"
           disabled={isPending}
         >

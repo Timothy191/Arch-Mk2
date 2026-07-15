@@ -1,9 +1,11 @@
 import "server-only";
 
-import { createServiceRoleClient } from "@repo/supabase/service-role";
+import { createKyselyClient } from "@repo/supabase/kysely";
 import { cacheLife, cacheTag } from "next/cache";
 import { CACHE_TAGS } from "../cache/tags";
 import { getOperationalToday } from "@repo/utils";
+
+const db = createKyselyClient();
 
 interface TelemetryRecord {
   period: string;
@@ -46,35 +48,51 @@ export async function getDrillingOpsData(deptId: string) {
   );
   cacheLife("minutes");
 
-  const supabase = createServiceRoleClient();
   const today = getOperationalToday();
 
-  const [{ data: drills }, { data: ops }, { data: operators }] =
-    await Promise.all([
-      supabase
-        .from("machines")
-        .select("id, name")
-        .eq("machine_type", "Drill Rig")
-        .eq("active", true)
-        .order("name"),
-      supabase
-        .from("drill_operations")
-        .select(
-          "id, machine_id, shift_type, operation_date, open_hours, close_hours, total_hours, operator_name, block_drilled, site, external_delays_minutes, standard_delays_hours, production_delays_minutes, engineering_delays_minutes, comments, status",
-        )
-        .eq("department_id", deptId)
-        .eq("operation_date", today),
-      supabase
-        .from("employees")
-        .select("id, full_name")
-        .eq("department_id", deptId)
-        .order("full_name"),
-    ]);
+  const [drills, ops, operators] = await Promise.all([
+    db
+      .selectFrom("machines")
+      .select(["id", "name"])
+      .where("machine_type", "=", "Drill Rig")
+      .where("active", "=", true as any)
+      .orderBy("name")
+      .execute(),
+    db
+      .selectFrom("drill_operations" as any)
+      .select([
+        "id",
+        "machine_id",
+        "shift_type",
+        "operation_date",
+        "open_hours",
+        "close_hours",
+        "total_hours",
+        "operator_name",
+        "block_drilled",
+        "site",
+        "external_delays_minutes",
+        "standard_delays_hours",
+        "production_delays_minutes",
+        "engineering_delays_hours",
+        "comments",
+        "status",
+      ] as any[])
+      .where("department_id" as any, "=", deptId)
+      .where("operation_date" as any, "=", today)
+      .execute(),
+    db
+      .selectFrom("employees" as any)
+      .select(["id" as any, "full_name" as any])
+      .where("department_id" as any, "=", deptId)
+      .orderBy("full_name" as any)
+      .execute(),
+  ]);
 
   return {
-    drills: drills ?? [],
-    ops: ops ?? [],
-    operators: operators ?? [],
+    drills: (drills as { id: string; name: string }[]) ?? [],
+    ops: (ops as any[]) ?? [],
+    operators: (operators as any[]) ?? [],
     deptId,
   };
 }
@@ -97,45 +115,46 @@ export async function getMachineTelemetryData(
   );
   cacheLife("minutes");
 
-  const supabase = createServiceRoleClient();
-  const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+  const currentMonth = new Date().toISOString().slice(0, 7);
 
-  const [
-    { data: drills },
-    { data: telemetry },
-    { data: archives },
-    { data: allMachines },
-    { data: monthlySummary },
-  ] = await Promise.all([
-    supabase
-      .from("machines")
-      .select("id, name")
-      .eq("machine_type", "Drill Rig")
-      .eq("active", true)
-      .order("name"),
-    supabase.rpc("get_telemetry_summary", {
-      p_department_id: deptId,
-      p_machine_id: selectedMachineId || null,
-      p_granularity: "day",
-    }),
-    supabase
-      .from("machine_telemetry_archive")
-      .select("id, year_month, archived_at, record_count, machine_id")
-      .eq("department_id", deptId)
-      .order("archived_at", { ascending: false })
-      .limit(12),
-    supabase
-      .from("machines")
-      .select("id, name")
-      .eq("machine_type", "Drill Rig"),
-    supabase.rpc("get_drill_monthly_summary", {
-      p_department_id: deptId,
-      p_year_month: currentMonth,
-    }),
-  ]);
+  const [drills, telemetry, archives, allMachines, monthlySummary] =
+    await Promise.all([
+      db
+        .selectFrom("machines")
+        .select(["id", "name"])
+        .where("machine_type", "=", "Drill Rig")
+        .where("active", "=", true as any)
+        .orderBy("name")
+        .execute(),
+      db
+        .selectFrom("get_telemetry_summary" as any)
+        .selectAll()
+        .where("p_department_id" as any, "=", deptId)
+        .where("p_machine_id" as any, "=", selectedMachineId || null)
+        .where("p_granularity" as any, "=", "day")
+        .execute(),
+      db
+        .selectFrom("machine_telemetry_archive" as any)
+        .select(["id", "year_month", "archived_at", "record_count", "machine_id"] as any[])
+        .where("department_id" as any, "=", deptId)
+        .orderBy("archived_at" as any, "desc")
+        .limit(12)
+        .execute(),
+      db
+        .selectFrom("machines")
+        .select(["id", "name"])
+        .where("machine_type", "=", "Drill Rig")
+        .execute(),
+      db
+        .selectFrom("get_drill_monthly_summary" as any)
+        .selectAll()
+        .where("p_department_id" as any, "=", deptId)
+        .where("p_year_month" as any, "=", currentMonth)
+        .execute(),
+    ]);
 
   const machineNameMap = new Map(
-    (allMachines || []).map((m: { id: string; name: string }) => [
+    ((allMachines as any[]) || []).map((m: { id: string; name: string }) => [
       m.id,
       m.name,
     ]),
@@ -155,7 +174,7 @@ export async function getMachineTelemetryData(
     currentMonth,
     telemetry: (telemetry || []) as TelemetryRecord[],
     archives: transformedArchives,
-    drills: drills || [],
+    drills: (drills as any[]) || [],
     monthlySummary: (monthlySummary || []) as DrillMonthlySummary[],
   };
 }

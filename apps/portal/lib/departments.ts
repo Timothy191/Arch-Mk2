@@ -114,7 +114,7 @@ export const DEPARTMENTS: Department[] = [
     trend: [445, 446, 447, 448, 449, 450, 450, 450],
     actions: [
       { label: "Daily Log", href: "/safety/daily-log" },
-      { label: "Incidents", href: "/safety/incidents" },
+      { label: "Incidents", href: "/safety/daily-log" },
     ],
   },
   {

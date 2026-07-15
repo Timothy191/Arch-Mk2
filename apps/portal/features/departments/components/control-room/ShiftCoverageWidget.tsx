@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { GlassCard } from "@repo/ui/GlassCard";
-import { createBrowserSupabaseClient } from "@repo/supabase/client";
 import { Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { CloseShiftModal } from "./CloseShiftModal";
+import { createKyselyClient } from "@repo/supabase/kysely";
+
+const db = createKyselyClient();
 
 interface ShiftCoverageWidgetProps {
   departmentId: string;
@@ -43,62 +45,31 @@ export function ShiftCoverageWidget({
   useEffect(() => {
     if (initialData) return;
     let cancelled = false;
-    const supabase = createBrowserSupabaseClient();
 
     async function fetchData() {
       setLoading(true);
       setError(null);
       try {
-        const [machinesRes, opsRes] = await Promise.all([
-          supabase
-            .from("machines")
-            .select("id, name, machine_type")
-            .eq("department_id", departmentId)
-            .eq("active", true)
-            .order("name"),
-          supabase
-            .from("machine_operations")
-            .select("machine_id, hours_worked")
-            .eq("department_id", departmentId)
-            .eq("shift_date", today)
-            .eq("shift_type", currentShift),
-        ]);
+        const machinesData = await db
+          .selectFrom("machines")
+          .select(["id", "name", "machine_type"])
+          .where("department_id", "=", departmentId)
+          .execute();
 
         if (cancelled) return;
 
-        if (machinesRes.error) throw machinesRes.error;
-        if (opsRes.error) throw opsRes.error;
-
         const opsMap = new Map<string, number | null>();
         const hasEntryMap = new Map<string, boolean>();
-        for (const op of opsRes.data || []) {
-          opsMap.set(op.machine_id, op.hours_worked);
-          hasEntryMap.set(op.machine_id, true);
-        }
 
-        const machinesWithOps: MachineWithOp[] = (machinesRes.data || []).map(
-          (m) => ({
-            id: m.id,
-            name: m.name,
-            machine_type: m.machine_type,
-            hours_worked: opsMap.get(m.id) ?? null,
-            has_entry: hasEntryMap.has(m.id),
-          }),
-        );
+        const machineWithOps: MachineWithOp[] = machinesData.map((m: Record<string, unknown>) => ({
+          id: m.id as string,
+          name: m.name as string,
+          machine_type: m.machine_type as string,
+          hours_worked: opsMap.get(m.id as string) ?? null,
+          has_entry: hasEntryMap.has(m.id as string),
+        }));
 
-        setMachines(machinesWithOps);
-
-        const { data: statusData } = await supabase
-          .from("shift_status")
-          .select("status")
-          .eq("department_id", departmentId)
-          .eq("shift_date", today)
-          .eq("shift_type", currentShift)
-          .maybeSingle();
-
-        if (statusData?.status === "closed") {
-          setIsClosed(true);
-        }
+        setMachines(machineWithOps);
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : "Failed to load data");
@@ -123,7 +94,9 @@ export function ShiftCoverageWidget({
           <h3 className="text-lg font-medium text-[var(--text-heading)]">
             Shift Coverage
           </h3>
-          <Clock className="w-5 h-5 text-[var(--text-muted)]" />
+          <div className="flex items-center justify-between">
+            <Clock className="w-5 h-5 text-[var(--text-muted)]" />
+          </div>
         </div>
         <div className="space-y-2">
           {[1, 2, 3].map((i) => (
@@ -182,32 +155,20 @@ export function ShiftCoverageWidget({
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-[var(--bg-tertiary)]">
-                    <th
-                      scope="col"
-                      className="text-left px-3 py-2 text-[var(--text-muted)] text-xs font-medium"
-                    >
+                    <th className="text-left px-3 py-2 text-[var(--text-muted)] text-xs font-medium" scope="col">
                       Machine
                     </th>
-                    <th
-                      scope="col"
-                      className="text-right px-3 py-2 text-[var(--text-muted)] text-xs font-medium"
-                    >
+                    <th className="text-right px-3 py-2 text-[var(--text-muted)] text-xs font-medium" scope="col">
                       Hours
                     </th>
-                    <th
-                      scope="col"
-                      className="text-center px-3 py-2 text-[var(--text-muted)] text-xs font-medium"
-                    >
+                    <th className="text-center px-3 py-2 text-[var(--text-muted)] text-xs font-medium" scope="col">
                       Status
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border-default)]">
                   {machines.map((m) => (
-                    <tr
-                      key={m.id}
-                      className="hover:bg-[var(--bg-tertiary)]/50 transition-colors"
-                    >
+                    <tr key={m.id} className="hover:bg-[var(--bg-tertiary)]/50 transition-colors">
                       <td className="px-3 py-2 text-[var(--text-heading)]">
                         <span className="text-[var(--text-muted)] text-xs mr-1.5">
                           {m.machine_type}
@@ -215,20 +176,18 @@ export function ShiftCoverageWidget({
                         {m.name}
                       </td>
                       <td className="px-3 py-2 text-right text-[var(--text-heading)]">
-                        {m.hours_worked !== null
-                          ? `${Number(m.hours_worked).toFixed(1)}h`
-                          : "—"}
+                        {m.hours_worked !== null ? `${Number(m.hours_worked).toFixed(1)}h` : "—"}
                       </td>
                       <td className="px-3 py-2 text-center">
                         {m.has_entry &&
-                        m.hours_worked !== null &&
-                        m.hours_worked > 0 ? (
-                          <CheckCircle className="w-4 h-4 text-accent-green mx-auto" />
-                        ) : m.has_entry && m.hours_worked === 0 ? (
-                          <AlertTriangle className="w-4 h-4 text-accent-blue mx-auto" />
-                        ) : (
-                          <XCircle className="w-4 h-4 text-accent-red mx-auto" />
-                        )}
+                          m.hours_worked !== null &&
+                          m.hours_worked > 0 ? (
+                            <CheckCircle className="w-4 h-4 text-accent-green mx-auto" />
+                          ) : m.has_entry && m.hours_worked === 0 ? (
+                            <AlertTriangle className="w-4 h-4 text-accent-blue mx-auto" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-accent-red mx-auto" />
+                          )}
                       </td>
                     </tr>
                   ))}
